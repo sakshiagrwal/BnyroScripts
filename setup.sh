@@ -88,9 +88,11 @@ config() {
     # install starship
     curl -sS https://starship.rs/install.sh | sh
     # install bfetch
-    git clone https://github.com/Bnyro/bfetch.git
-    cp bfetch/bfetch /usr/local/bin/
+    cp bfetch /usr/local/bin/bfetch
     chmod +x /usr/local/bin/bfetch
+	# install bnyro
+	cp bnyro /usr/local/bin/bnyro
+	chmod +x /usr/local/bin/bnyro
     # setup fish
 	if has fish; then
 		chsh -s $(which fish)
