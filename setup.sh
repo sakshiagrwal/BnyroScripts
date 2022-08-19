@@ -2,7 +2,6 @@
 
 THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
-MUSICTXTDIR=~/Documents/Linux/music
 
 DESKTOPAPPS="insomnia filezilla librewolf thunderbird grub-customizer gimp inkscape arduino android-studio noisetorch"
 CMDTOOLS="fish nvim git wget exa bat duf autojump ffmpeg android-tools pyton-pip"
