@@ -1,0 +1,71 @@
+#!/bin/bash
+
+has() {
+	(command -v "$1" &>/dev/null)
+}
+
+chext() { # old extension, new extension
+	old=$1
+	new=$2
+	echo "# Changing extensions from $old to $new ..."
+	find . -name "*.$old" | while read i; do
+		mv "$i" "${i%.$old}.$new"
+	done
+}
+
+playlist() { # playlist files directory
+  for playlist in "$@"; do
+    filename=${playlist##*/}
+    name=${filename/.txt//}
+		echo "# Downloading ${name} ..."
+		yt-dlp -q -f 'ba' -x --audio-format opus -o "${name}/%(title)s.%(ext)s" -a ${playlist}
+	done
+	chext opus ogg
+	echo "# Downloaded playlists succesfully"
+}
+
+music() { # song or playlist url
+	echo "# Downloading..."
+	yt-dlp -q -f 'ba' -x --audio-format opus -o '%(title)s.%(ext)s' $1
+	chext opus ogg
+}
+
+append () { # url, filename (not extension)
+	[ -f "${MUSICTXTDIR}/$2.txt" ] && echo "$1" >> "${MUSICTXTDIR}/$2.txt" || exit 1
+	cd ~/Music/$2
+	music "$1"
+}
+
+update() {
+	echo "# Updating System ..."
+	has pacman && sudo -S pacman -Syu --noconfirm
+	has paru && paru -Syu --noconfirm
+	has nala && sudo nala update && sudo nala upgrade
+	echo "# Removing Unneeded Packages ..."
+	has pacman && sudo pacman -Rns --noconfirm $(pacman -Qtdq)
+	has nala && sudo nala autoremove
+	echo "# Cleaning App Cache ..."
+	has pacman && sudo pacman -Scc --noconfirm
+	has nala && sudo nala clean
+	echo "# Cleaning Cache ..."
+	sudo rm -r ~/.cache /var/cache/* /var/tmp/*
+	echo "# Done."
+}
+
+gitpush() { # commit message
+	branch=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+  	git add .
+  	git commit -am "$1"
+  	git push origin "$branch"
+}
+
+case ${1} in
+update) update ;;
+music) music $2 ;;
+append) append $2 $3 ;;
+playlist) playlist "${@: 2}" ;;
+chext) chext $2 $3 ;;
+push) gitpush "$2" ;;
+*) update ;;
+esac
+
