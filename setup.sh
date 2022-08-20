@@ -98,8 +98,7 @@ config() {
 		chsh -s $(which fish)
 		chsh -s $(which fish)
 		sed -i 's/bash/fish/' /etc/default/useradd
-		wget -q https://raw.githubusercontent.com/jichu4n/fish-command-timer/master/conf.d/fish_command_timer.fish -P ~/.config/fish/conf.d/
-    	echo 'alias ls="exa -TlaL 2 --icons"
+    echo 'alias ls="exa -TlaL 2 --icons"
         alias df="duf /"
         set fish_greeting
         bfetch
