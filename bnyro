@@ -32,10 +32,15 @@ music() { # song or playlist url
 	chext opus ogg
 }
 
-append () { # url, filename (not extension)
-	[ -f "${MUSICTXTDIR}/$2.txt" ] && echo "$1" >> "${MUSICTXTDIR}/$2.txt" || exit 1
-	cd ~/Music/$2
-	music "$1"
+append () { # filename (not extension), urls
+	[ -f "${MUSICTXTDIR}/$1.txt" ] || exit 1
+	! [ -d ~/Music/$1 ] && mkdir cd ~/Music/$1
+	cd ~/Music/$1
+	for URL in $2; do
+		grep -rnw $MUSICTXTDIR -e $URL && echo "URL already used" && exit
+		echo "$URL" >> "${MUSICTXTDIR}/$1.txt"
+		music "$URL"
+	done
 }
 
 update() {
@@ -56,18 +61,24 @@ update() {
 
 gitpush() { # commit message
 	branch=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
-  	git add .
-  	git commit -am "$1"
-  	git push origin "$branch"
+  git add .
+  git commit -am "$1"
+  git push origin "$branch"
+}
+
+selfinstall() {
+	sudo cp bnyro /usr/local/bin
+	sudo chmod +x /usr/local/bin/bnyro
 }
 
 case ${1} in
 update) update ;;
 music) music $2 ;;
-append) append $2 $3 ;;
+append) append $2 "${@: 3}" ;;
 playlist) playlist "${@: 2}" ;;
 chext) chext $2 $3 ;;
 push) gitpush "$2" ;;
+selfinstall) selfinstall ;;
 *) update ;;
 esac
 
