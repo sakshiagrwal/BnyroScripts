@@ -36,10 +36,12 @@ append () { # filename (not extension), urls
 	[ -f "${MUSICTXTDIR}/$1.txt" ] || exit 1
 	! [ -d ~/Music/$1 ] && mkdir cd ~/Music/$1
 	cd ~/Music/$1
-	for URL in $2; do
-		grep -rnw $MUSICTXTDIR -e $URL && echo "URL already used" && exit
-		echo "$URL" >> "${MUSICTXTDIR}/$1.txt"
-		music "$URL"
+	for URL in "${@: 2}"; do
+		grep -rnw $MUSICTXTDIR -e $URL && echo "URL already used" ||
+		(
+			echo "$URL" >> "${MUSICTXTDIR}/$1.txt"
+			music "$URL"
+		)
 	done
 }
 
