@@ -4,7 +4,7 @@ THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
 
 DESKTOPAPPS="insomnia filezilla librewolf thunderbird grub-customizer gimp inkscape arduino android-studio noisetorch vscodium"
-CMDTOOLS="fish nvim git wget exa bat duf autojump ffmpeg android-tools pyton-pip"
+CMDTOOLS="fish nvim helix git wget exa bat duf autojump ffmpeg android-tools pyton-pip"
 
 GTKTHEMES="
 	https://github.com/vinceliuice/Orchis-theme
