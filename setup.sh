@@ -3,8 +3,8 @@
 THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
 
-DESKTOPAPPS="insomnia filezilla librewolf thunderbird grub-customizer gimp inkscape arduino android-studio noisetorch vscodium"
-CMDTOOLS="fish nvim helix git wget exa bat duf autojump ffmpeg android-tools pyton-pip"
+DESKTOPAPPS="insomnia filezilla librewolf thunderbird grub-customizer gimp inkscape android-studio vscodium"
+CMDTOOLS="fish nvim helix git wget exa bat duf ffmpeg android-tools python-pip"
 
 GTKTHEMES="
 	https://github.com/vinceliuice/Orchis-theme
@@ -12,7 +12,7 @@ GTKTHEMES="
 	https://github.com/vinceliuice/Layan-gtk-theme
 	https://github.com/vinceliuice/WhiteSur-gtk-theme
 	https://github.com/EliverLara/Nordic
-  	https://github.com/ZorinOS/zorin-desktop-themes
+  https://github.com/ZorinOS/zorin-desktop-themes
 	https://github.com/vinceliuice/Graphite-gtk-theme
 "
 
@@ -23,7 +23,7 @@ ICONTHEMES="
 	https://github.com/vinceliuice/WhiteSur-icon-theme
 	https://github.com/EliverLara/candy-icons
 	https://github.com/gvolpe/BeautyLine
-  	https://github.com/ZorinOS/zorin-icon-themes
+  https://github.com/ZorinOS/zorin-icon-themes
 "
 
 GRUBTHEMES="
