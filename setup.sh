@@ -3,8 +3,8 @@
 THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
 
-DESKTOPAPPS="insomnia filezilla librewolf thunderbird grub-customizer gimp inkscape android-studio vscodium"
-CMDTOOLS="fish nvim helix git wget exa bat duf ffmpeg android-tools python-pip"
+DESKTOPAPPS="insomnia filezilla librewolf thunderbird gimp inkscape android-studio vscodium"
+CMDTOOLS="fish helix git wget exa bat duf ffmpeg android-tools python-pip"
 
 GTKTHEMES="
 	https://github.com/vinceliuice/Orchis-theme
@@ -98,18 +98,15 @@ config() {
 		chsh -s $(which fish)
 		chsh -s $(which fish)
 		sed -i 's/bash/fish/' /etc/default/useradd
-    echo 'alias ls="exa -TlaL 2 --icons"
-        alias df="duf /"
+    echo 'alias ls="exa -Tla --icons"
         set fish_greeting
         bfetch
         starship init fish | source' > ~/.config/fish/config.fish
 	fi
-    # install lunarvim
-    has nvim && bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
 }
 
 installPM() {
-    # install paru
+  # install paru
 	if has pacman && ! has paru; then
 		pacman -S --needed git base-devel
 		git clone https://aur.archlinux.org/paru.git
@@ -139,10 +136,14 @@ case ${1} in
     installthemes
     config
     ;;
+--theme)
+		installthemes
+		;;
 *)
     echo "### Normal setup ###"
     installPM
     installapps "$DESKTOPAPPS $CMDTOOLS"
+		installthemes
     config
     ;;
 esac
