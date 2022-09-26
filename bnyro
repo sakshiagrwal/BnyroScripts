@@ -68,6 +68,22 @@ gitpush() { # commit message
   git push origin "$branch"
 }
 
+minify() { # file path
+	if test $# -lt 1
+	then
+		echo Usage $0 CSS-or-JS-file
+		exit 1
+	fi
+
+	outfile=`echo $1 | sed -e "s|-raw.\(.*\)$|.\1|"`
+	if test "$1" = "$outfile"
+	then outfile=/dev/stdout
+	else echo Minimising $1 and outputting to $outfile
+	fi
+
+	cat $1 | sed -e "s|/\*\(\\\\\)\?\*/|/~\1~/|g" -e "s|/\*[^*]*\*\+\([^/][^*]*\*\+\)*/||g" -e "s|\([^:/]\)//.*$|\1|" -e "s|^//.*$||" | tr '\n' ' ' | sed -e "s|/\*[^*]*\*\+\([^/][^*]*\*\+\)*/||g" -e "s|/\~\(\\\\\)\?\~/|/*\1*/|g" -e "s|\s\+| |g" -e "s| \([{;:,]\)|\1|g" -e "s|\([{;:,]\) |\1|g" > $outfile
+}
+
 selfinstall() {
 	sudo cp bnyro /usr/local/bin
 	sudo chmod +x /usr/local/bin/bnyro
@@ -80,6 +96,7 @@ append) append $2 "${@: 3}" ;;
 playlist) playlist "${@: 2}" ;;
 chext) chext $2 $3 ;;
 push) gitpush "$2" ;;
+minify) minify "$2" ;;
 selfinstall) selfinstall ;;
 *) update ;;
 esac
