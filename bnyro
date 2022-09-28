@@ -84,6 +84,11 @@ minify() { # file path
 	cat $1 | sed -e "s|/\*\(\\\\\)\?\*/|/~\1~/|g" -e "s|/\*[^*]*\*\+\([^/][^*]*\*\+\)*/||g" -e "s|\([^:/]\)//.*$|\1|" -e "s|^//.*$||" | tr '\n' ' ' | sed -e "s|/\*[^*]*\*\+\([^/][^*]*\*\+\)*/||g" -e "s|/\~\(\\\\\)\?\~/|/*\1*/|g" -e "s|\s\+| |g" -e "s| \([{;:,]\)|\1|g" -e "s|\([{;:,]\) |\1|g" > $outfile
 }
 
+rs() {
+	name=$(basename $1 .rs)
+	rustc $@ && ./$name && rm $name
+
+
 selfinstall() {
 	sudo cp bnyro /usr/local/bin
 	sudo chmod +x /usr/local/bin/bnyro
@@ -97,6 +102,7 @@ playlist) playlist "${@: 2}" ;;
 chext) chext $2 $3 ;;
 push) gitpush "$2" ;;
 minify) minify "$2" ;;
+rs) rs "$2" ;;
 selfinstall) selfinstall ;;
 *) update ;;
 esac
