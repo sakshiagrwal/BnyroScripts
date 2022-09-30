@@ -9,7 +9,7 @@ has() {
 }
 
 get_os() {
-	awk -F '"' '/PRETTY_NAME/ { print $2 }' /etc/os-release
+	awk -F= '$1=="PRETTY_NAME" { print $2 ;}' /etc/os-release
 }
 
 get_kernel() {
