@@ -98,10 +98,7 @@ config() {
 		chsh -s $(which fish)
 		chsh -s $(which fish)
 		sed -i 's/bash/fish/' /etc/default/useradd
-    echo 'alias ls="exa -Tla --icons"
-        set fish_greeting
-        bfetch
-        starship init fish | source' > ~/.config/fish/config.fish
+		cp config.fish ~/.config/fish/config.fish
 	fi
 }
 
