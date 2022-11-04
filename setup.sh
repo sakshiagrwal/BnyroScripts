@@ -41,11 +41,11 @@ gitinstall() { # urls, ./install.sh flags, theme/icons directory
 		git clone $link
 		dir=${link##*/}
 		if [ -f ${dir}/install.sh ]; then
-			./${dir}/install.sh $2
+			sudo ./${dir}/install.sh $2
 		elif [ -f ${dir}/index.theme ]; then
-			mv ${dir} "$3"
+			sudo mv ${dir} "$3"
     else 
-      mv ${dir}/* "$3"
+      sudo mv ${dir}/* "$3"
 		fi
 	done
 }
@@ -53,50 +53,47 @@ gitinstall() { # urls, ./install.sh flags, theme/icons directory
 installthemes() {
 	mkdir ~/Themes
 	cd ~/Themes
-	echo "# Installing GTK Themes ..."
+	echo "Installing GTK Themes ..."
 	gitinstall "$GTKTHEMES" "-d $THEMESDIR -t all" "$THEMESDIR"
-	echo "# Installing Icon Themes ..."
+	echo "Installing Icon Themes ..."
 	gitinstall "$ICONTHEMES" "-a -d $ICONSDIR" "$ICONSDIR"
 	cd ..
-    rm -r Themes
-	echo "# Downloading Grub Themes ..."
+	rm -r Themes
+	echo "Downloading Grub Themes ..."
 	mkdir ~/Grub
 	cd ~/Grub
 	for grub in $GRUBTHEMES; do
 		git clone $grub
 	done
-	echo "# Installed themes succesully"
+	echo "Installed themes succesully"
 }
 
 installapps() { # apps
 	for app in $1; do
 		if ! has "$app"; then
-			echo "# Installing $app"
-			has apt && apt install -y $app
+			echo "Installing $app"
 			has paru && paru -S --noconfirm $app
-			has dnf && dnf -y install $app
-            has apk && apk add $app
 		fi
-		[ $? != 0 ] && echo "# Failed to install $app"
+		[ $? != 0 ] && echo "Failed to install $app"
 	done
 }
 
 config() {
     # install yt-dlp
 	wget -q https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp &&
-    chmod a+rx /usr/local/bin/yt-dlp
+    sudo chmod a+rx /usr/local/bin/yt-dlp
     # install starship
     curl -sS https://starship.rs/install.sh | sh
     # install bfetch
     cp bfetch /usr/local/bin/bfetch
-    chmod +x /usr/local/bin/bfetch
+    sudo chmod +x /usr/local/bin/bfetch
 	# install bnyro
 	cp bnyro /usr/local/bin/bnyro
-	chmod +x /usr/local/bin/bnyro
+	sudo chmod +x /usr/local/bin/bnyro
     # setup fish
 	if has fish; then
 		chsh -s $(which fish)
-		chsh -s $(which fish)
+		sudo chsh -s $(which fish)
 		sed -i 's/bash/fish/' /etc/default/useradd
 		cp config.fish ~/.config/fish/config.fish
 	fi
@@ -104,27 +101,13 @@ config() {
 
 installPM() {
   # install paru
-	if has pacman && ! has paru; then
-		pacman -S --needed git base-devel
+	if ! has paru; then
+		sudo pacman -S --needed git base-devel
 		git clone https://aur.archlinux.org/paru.git
 		cd paru && makepkg -si
 		cd .. && rm -r paru
 	fi
-    # install nala
-	if has apt && ! has nala; then
-		echo "deb [arch=amd64,arm64,armhf] http://deb.volian.org/volian/ scar main" | tee /etc/apt/sources.list.d/volian-archive-scar-unstable.list
-		wget -qO- https://deb.volian.org/volian/scar.key | tee /etc/apt/trusted.gpg.d/volian-archive-scar-unstable.gpg >/dev/null
-		apt update
-		apt install -y nala
-	fi
 }
-
-# check for root permissions
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
-  exit 1
-fi
-
 case ${1} in
 --headless)
     echo "### Setup without desktop ###"
