@@ -3,7 +3,7 @@
 THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
 
-DESKTOPAPPS="insomnia filezilla librewolf thunderbird gimp inkscape android-studio vscodium"
+DESKTOPAPPS="filezilla librewolf-bin thunderbird gimp inkscape android-studio vscodium-bin"
 CMDTOOLS="fish helix git wget exa bat duf ffmpeg android-tools python-pip"
 
 GTKTHEMES="
@@ -79,22 +79,22 @@ installapps() { # apps
 }
 
 config() {
-    # install yt-dlp
-	wget -q https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp &&
-    sudo chmod a+rx /usr/local/bin/yt-dlp
-    # install starship
-    curl -sS https://starship.rs/install.sh | sh
-    # install bfetch
-    cp bfetch /usr/local/bin/bfetch
-    sudo chmod +x /usr/local/bin/bfetch
+	# install yt-dlp
+	sudo wget -q https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp &&
+  sudo chmod a+rx /usr/local/bin/yt-dlp
+  # install starship
+  curl -sS https://starship.rs/install.sh | sh
+  # install bfetch
+  sudo cp bfetch /usr/local/bin/bfetch
+  sudo chmod +x /usr/local/bin/bfetch
 	# install bnyro
-	cp bnyro /usr/local/bin/bnyro
+	sudo cp bnyro /usr/local/bin/bnyro
 	sudo chmod +x /usr/local/bin/bnyro
-    # setup fish
+  # setup fish
 	if has fish; then
 		chsh -s $(which fish)
 		sudo chsh -s $(which fish)
-		sed -i 's/bash/fish/' /etc/default/useradd
+		sudo sed -i 's/bash/fish/' /etc/default/useradd
 		cp config.fish ~/.config/fish/config.fish
 	fi
 }
@@ -118,6 +118,9 @@ case ${1} in
     ;;
 --theme)
 		installthemes
+		;;
+--config)
+		config
 		;;
 *)
     echo "### Normal setup ###"
