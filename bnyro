@@ -46,19 +46,15 @@ append () { # filename (not extension), urls
 }
 
 update() {
-	echo "# Updating System ..."
-	has pacman && sudo -S pacman -Syu --noconfirm
+	echo "### Updating System ###"
 	has paru && paru -Syu --noconfirm
-	has nala && sudo nala update && sudo nala upgrade
-	echo "# Removing Unneeded Packages ..."
+	echo "### Removing Unneeded Packages ###"
 	has pacman && sudo pacman -Rns --noconfirm $(pacman -Qtdq)
-	has nala && sudo nala autoremove
-	echo "# Cleaning App Cache ..."
+	echo "### Cleaning App Cache ###"
 	has pacman && sudo pacman -Scc --noconfirm
-	has nala && sudo nala clean
-	echo "# Cleaning Cache ..."
-	sudo rm -r ~/.cache /var/cache/* /var/tmp/*
-	echo "# Done."
+	echo "### Cleaning Cache ###"
+	sudo rm -rf ~/.cache /var/cache/* /var/tmp/*
+	echo "### Done ###"
 }
 
 gitpush() { # commit message
