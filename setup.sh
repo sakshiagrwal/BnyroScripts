@@ -24,6 +24,7 @@ ICONTHEMES="
 	https://github.com/EliverLara/candy-icons
 	https://github.com/gvolpe/BeautyLine
   https://github.com/ZorinOS/zorin-icon-themes
+	https://github.com/PapirusDevelopmentTeam/papirus-icon-theme
 "
 
 GRUBTHEMES="
