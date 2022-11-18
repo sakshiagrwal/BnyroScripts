@@ -2,6 +2,7 @@
 
 THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
+GRUBDIR=/boot/grub/themes
 
 DESKTOPAPPS="librewolf-bin thunderbird gimp inkscape android-studio vscodium-bin"
 CMDTOOLS="fish helix git wget exa bat duf ffmpeg android-tools yt-dlp"
@@ -61,8 +62,8 @@ installthemes() {
 	cd ..
 	rm -r Themes
 	echo "Downloading Grub Themes ..."
-	mkdir ~/Grub
-	cd ~/Grub
+	mkdir $GRUBDIR
+	cd $GRUBDIR
 	for grub in $GRUBTHEMES; do
 		git clone $grub
 	done
@@ -99,6 +100,7 @@ config() {
 
 installPM() {
   # install paru
+	! has pacman && exit 0
 	if ! has paru; then
 		sudo pacman -S --needed git base-devel
 		git clone https://aur.archlinux.org/paru.git
@@ -111,7 +113,6 @@ case ${1} in
     echo "### Setup without desktop ###"
     installPM
     installapps "$CMDTOOLS"
-    installthemes
     config
     ;;
 --theme)
