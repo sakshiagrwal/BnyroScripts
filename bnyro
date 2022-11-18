@@ -16,9 +16,9 @@ chext() { # old extension, new extension
 }
 
 playlist() { # playlist files directory
-  for playlist in "$@"; do
-    filename=${playlist##*/}
-    name=${filename/.txt//}
+	for playlist in "$@"; do
+		filename=${playlist##*/}
+		name=${filename/.txt//}
 		echo "# Downloading ${name} ..."
 		yt-dlp -q -f 'ba' -x --audio-format opus -o "${name}/%(title)s.%(ext)s" -a ${playlist}
 	done
@@ -32,16 +32,16 @@ music() { # song or playlist url
 	chext opus ogg
 }
 
-append () { # filename (not extension), urls
+append() { # filename (not extension), urls
 	[ -f "${MUSICTXTDIR}/$1.txt" ] || exit 1
 	! [ -d ~/Music/$1 ] && mkdir cd ~/Music/$1
 	cd ~/Music/$1
-	for URL in "${@: 2}"; do
+	for URL in "${@:2}"; do
 		grep -rnw $MUSICTXTDIR -e $URL && echo "URL already used" ||
-		(
-			echo "$URL" >> "${MUSICTXTDIR}/$1.txt"
-			music "$URL"
-		)
+			(
+				echo "$URL" >>"${MUSICTXTDIR}/$1.txt"
+				music "$URL"
+			)
 	done
 }
 
@@ -60,25 +60,25 @@ update() {
 
 gitpush() { # commit message
 	branch=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
-  git add .
-  git commit -am "$1"
-  git push origin "$branch"
+	git add .
+	git commit -am "$1"
+	git push origin "$branch"
 }
 
 minify() { # file path
-	if test $# -lt 1
-	then
+	if test $# -lt 1; then
 		echo Usage $0 CSS-or-JS-file
 		exit 1
 	fi
 
-	outfile=`echo $1 | sed -e "s|-raw.\(.*\)$|.\1|"`
-	if test "$1" = "$outfile"
-	then outfile=/dev/stdout
-	else echo Minimising $1 and outputting to $outfile
+	outfile=$(echo $1 | sed -e "s|-raw.\(.*\)$|.\1|")
+	if test "$1" = "$outfile"; then
+		outfile=/dev/stdout
+	else
+		echo Minimising $1 and outputting to $outfile
 	fi
 
-	cat $1 | sed -e "s|/\*\(\\\\\)\?\*/|/~\1~/|g" -e "s|/\*[^*]*\*\+\([^/][^*]*\*\+\)*/||g" -e "s|\([^:/]\)//.*$|\1|" -e "s|^//.*$||" | tr '\n' ' ' | sed -e "s|/\*[^*]*\*\+\([^/][^*]*\*\+\)*/||g" -e "s|/\~\(\\\\\)\?\~/|/*\1*/|g" -e "s|\s\+| |g" -e "s| \([{;:,]\)|\1|g" -e "s|\([{;:,]\) |\1|g" > $outfile
+	cat $1 | sed -e "s|/\*\(\\\\\)\?\*/|/~\1~/|g" -e "s|/\*[^*]*\*\+\([^/][^*]*\*\+\)*/||g" -e "s|\([^:/]\)//.*$|\1|" -e "s|^//.*$||" | tr '\n' ' ' | sed -e "s|/\*[^*]*\*\+\([^/][^*]*\*\+\)*/||g" -e "s|/\~\(\\\\\)\?\~/|/*\1*/|g" -e "s|\s\+| |g" -e "s| \([{;:,]\)|\1|g" -e "s|\([{;:,]\) |\1|g" >$outfile
 }
 
 rs() {
@@ -96,8 +96,8 @@ selfinstall() {
 case ${1} in
 update) update ;;
 music) music $2 ;;
-append) append $2 "${@: 3}" ;;
-playlist) playlist "${@: 2}" ;;
+append) append $2 "${@:3}" ;;
+playlist) playlist "${@:2}" ;;
 chext) chext $2 $3 ;;
 push) gitpush "$2" ;;
 minify) minify "$2" ;;
@@ -105,4 +105,3 @@ rs) rs "$2" ;;
 selfinstall) selfinstall ;;
 *) update ;;
 esac
-

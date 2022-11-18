@@ -46,8 +46,8 @@ gitinstall() { # urls, ./install.sh flags, theme/icons directory
 			sudo ./${dir}/install.sh $2
 		elif [ -f ${dir}/index.theme ]; then
 			sudo mv ${dir} "$3"
-    else 
-      sudo mv ${dir}/* "$3"
+		else
+			sudo mv ${dir}/* "$3"
 		fi
 	done
 }
@@ -81,15 +81,15 @@ installapps() { # apps
 }
 
 config() {
-  # install starship
-  curl -sS https://starship.rs/install.sh | sh
-  # install bfetch
-  sudo cp bfetch /usr/local/bin/bfetch
-  sudo chmod +x /usr/local/bin/bfetch
+	# install starship
+	curl -sS https://starship.rs/install.sh | sh
+	# install bfetch
+	sudo cp bfetch /usr/local/bin/bfetch
+	sudo chmod +x /usr/local/bin/bfetch
 	# install bnyro
 	sudo cp bnyro /usr/local/bin/bnyro
 	sudo chmod +x /usr/local/bin/bnyro
-  # setup fish
+	# setup fish
 	if has fish; then
 		chsh -s $(which fish)
 		sudo chsh -s $(which fish)
@@ -99,7 +99,7 @@ config() {
 }
 
 installPM() {
-  # install paru
+	# install paru
 	! has pacman && exit 0
 	if ! has paru; then
 		sudo pacman -S --needed git base-devel
@@ -110,22 +110,22 @@ installPM() {
 }
 case ${1} in
 --headless)
-    echo "### Setup without desktop ###"
-    installPM
-    installapps "$CMDTOOLS"
-    config
-    ;;
+	echo "### Setup without desktop ###"
+	installPM
+	installapps "$CMDTOOLS"
+	config
+	;;
 --theme)
-		installthemes
-		;;
+	installthemes
+	;;
 --config)
-		config
-		;;
+	config
+	;;
 *)
-    echo "### Normal setup ###"
-    installPM
-    installapps "$DESKTOPAPPS $CMDTOOLS"
-		installthemes
-    config
-    ;;
+	echo "### Normal setup ###"
+	installPM
+	installapps "$DESKTOPAPPS $CMDTOOLS"
+	installthemes
+	config
+	;;
 esac
