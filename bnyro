@@ -47,11 +47,12 @@ append () { # filename (not extension), urls
 
 update() {
 	echo "### Updating System ###"
-	has paru && paru -Syu --noconfirm
+	pm="sudo pacman" && has paru && pm="paru"
+	$pm -Syu --noconfirm
 	echo "### Removing Unneeded Packages ###"
-	has pacman && sudo pacman -Rns --noconfirm $(pacman -Qtdq)
+	$pm -Rns --noconfirm $($pm -Qtdq)
 	echo "### Cleaning App Cache ###"
-	has pacman && sudo pacman -Scc --noconfirm
+	$pm -Scc --noconfirm
 	echo "### Cleaning Cache ###"
 	sudo rm -rf ~/.cache /var/cache/* /var/tmp/*
 	echo "### Done ###"
@@ -86,8 +87,10 @@ rs() {
 }
 
 selfinstall() {
-	sudo cp bnyro /usr/local/bin
-	sudo chmod +x /usr/local/bin/bnyro
+	for program in "bnyro bfetch"; do
+		sudo cp $program /usr/local/bin
+		sudo chmod +x /usr/local/bin/$program
+	done
 }
 
 case ${1} in
