@@ -38,12 +38,11 @@ get_uptime() {
 
 get_packages() {
 	(
-		has pacman && pacman -Q
+		has pacman-key && pacman -Q
 		has dpkg && dpkg --list
 		has dnf && dnf list installed
 		has bonsai && bonsai list
 		has crux && pkginfo -i
-		has pacman-key && pacman -Qq
 		has rpm && rpm -qa
 		has xbps-query && xbps-query -l
 		has apk && apk info
