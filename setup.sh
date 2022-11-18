@@ -3,8 +3,8 @@
 THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
 
-DESKTOPAPPS="filezilla librewolf-bin thunderbird gimp inkscape android-studio vscodium-bin"
-CMDTOOLS="fish helix git wget exa bat duf ffmpeg android-tools python-pip"
+DESKTOPAPPS="librewolf-bin thunderbird gimp inkscape android-studio vscodium-bin"
+CMDTOOLS="fish helix git wget exa bat duf ffmpeg android-tools yt-dlp"
 
 GTKTHEMES="
 	https://github.com/vinceliuice/Orchis-theme
@@ -80,9 +80,6 @@ installapps() { # apps
 }
 
 config() {
-	# install yt-dlp
-	sudo wget -q https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp &&
-  sudo chmod a+rx /usr/local/bin/yt-dlp
   # install starship
   curl -sS https://starship.rs/install.sh | sh
   # install bfetch
