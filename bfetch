@@ -25,7 +25,8 @@ get_storage() {
 }
 
 get_ram() {
-	free -h | awk 'NR == 2 { print $3" / "$2 }' | sed 's/i//g'
+	# free -h | awk 'NR == 2 { print $3"/"$2 }' | sed 's/i//g'
+	free -h | awk 'NR == 2 { print $3 }' | sed 's/i//g' | sed 's/,/./g'
 }
 
 get_uptime() {
@@ -93,6 +94,7 @@ ${c0}     (${c2}<> ${c0}|     ${cyan}kernel    ${ic}$(get_kernel)
 ${c0}    /${c1}/  \\ ${c0}\\    ${blue}uptime    ${ic}$(get_uptime)
 ${c0}   ( ${c1}|  | ${c0}/|   ${yellow}packages  ${ic}$(get_packages)
 ${c2}  _${c0}/\\ ${c1}__)${c0}/${c2}_${c0})   ${red}disk      ${ic}$(get_storage)
-${c2}  \/${c0}-____${c2}\/${reset}    ${green}de        ${ic}$(get_de)
+${c2}  \/${c0}-____${c2}\/${reset}    ${green}ram       ${ic}$(get_ram)
+${c2}               ${cyan}wm        $ic$(get_de)
 ${reset}
 EOF
