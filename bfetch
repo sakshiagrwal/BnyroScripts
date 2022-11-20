@@ -1,6 +1,6 @@
 #!/bin/bash
 
-### Forked by nerdfetch, ufetch, pfetch & rxfetch
+### Based on nerdfetch, ufetch, pfetch & rxfetch
 
 ## GET SYSTEM INFORMATION
 
@@ -17,7 +17,7 @@ get_kernel() {
 }
 
 get_de() {
-	echo ${XDG_CURRENT_DESKTOP:-${DESKTOP_SESSION:-unknown}}
+	echo ${XDG_CURRENT_DESKTOP:-${DESKTOP_SESSION:-${GDMSESSION:-unknown}}}
 }
 
 get_storage() {
