@@ -94,11 +94,11 @@ gitpush() { # commit message
 	git push origin "$branch"
 }
 
-gitcheckout { # name of the new branch
-	oldbranch=$(gitbranch)
-	mainbranch=$(gitmainbranch)
-	git checkout master
-	git fetch upstream && git reset --hard upstream/master
+gitcheckout() { # name of the new branch
+	oldbranch="$(gitbranch)"
+	mainbranch="$(gitmainbranch)"
+	git checkout "$mainbranch"
+	(git fetch upstream && git reset --hard upstream/master || git pull) &> /dev/null
 	git checkout -b "$1"
 	[ "$2" = "-d" ] && [ "$oldbranch" != "$mainbranch" ] && git branch -d "$oldbranch"
 }
