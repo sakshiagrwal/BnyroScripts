@@ -58,13 +58,6 @@ update() {
 	echo "### Done ###"
 }
 
-gitpush() { # commit message
-	branch=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
-	git add .
-	git commit -am "$1"
-	git push origin "$branch"
-}
-
 minify() { # file path
 	if test $# -lt 1; then
 		echo Usage $0 CSS-or-JS-file
@@ -86,6 +79,30 @@ rs() {
 	rustc $@ && ./$name && rm $name
 }
 
+gitmainbranch() {
+	git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
+}
+
+gitbranch() {
+	git rev-parse --symbolic-full-name --abbrev-ref HEAD
+}
+
+gitpush() { # commit message
+	branch=$(bbrev-ref HEAD)
+	git add .
+	git commit -am "$1"
+	git push origin "$branch"
+}
+
+gitcheckout { # name of the new branch
+	oldbranch=$(gitbranch)
+	mainbranch=$(gitmainbranch)
+	git checkout master
+	git fetch upstream && git reset --hard upstream/master
+	git checkout -b "$1"
+	[ "$2" = "-d" ] && [ "$oldbranch" != "$mainbranch" ] && git branch -d "$oldbranch"
+}
+
 selfinstall() {
 	for program in "bnyro bfetch"; do
 		sudo cp $program /usr/local/bin
@@ -100,6 +117,7 @@ append) append $2 "${@:3}" ;;
 playlist) playlist "${@:2}" ;;
 chext) chext $2 $3 ;;
 push) gitpush "$2" ;;
+checkout) gitcheckout "$2" "$3" ;;
 minify) minify "$2" ;;
 rs) rs "$2" ;;
 selfinstall) selfinstall ;;
