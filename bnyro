@@ -88,10 +88,10 @@ gitbranch() {
 }
 
 gitpush() { # commit message
-	branch=$(bbrev-ref HEAD)
+	[ -f "build.gradle" ] && ktlint --android -F
 	git add .
 	git commit -am "$1"
-	git push origin "$branch"
+	git push origin "$(gitbranch)"
 }
 
 gitcheckout() { # name of the new branch
