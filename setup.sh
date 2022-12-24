@@ -6,7 +6,7 @@ GRUBDIR=/boot/grub/themes
 
 DESKTOPAPPS="thunderbird gimp inkscape"
 AURPKGS="librewolf-bin android-studio-beta vscodium-bin"
-CMDTOOLS="fish helix git wget exa bat duf bottom xh android-tools yt-dlp ffmpeg"
+CMDTOOLS="fish helix git wget exa bat duf bottom xh zoxide android-tools yt-dlp ffmpeg"
 
 GTKTHEMES="
 	https://github.com/vinceliuice/Orchis-theme
