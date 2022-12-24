@@ -4,7 +4,8 @@ THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
 GRUBDIR=/boot/grub/themes
 
-DESKTOPAPPS="librewolf-bin thunderbird gimp inkscape android-studio vscodium-bin"
+DESKTOPAPPS="thunderbird gimp inkscape"
+AURPKGS="librewolf-bin android-studio-beta vscodium-bin"
 CMDTOOLS="fish helix git wget exa bat duf bottom xh android-tools yt-dlp ffmpeg"
 
 GTKTHEMES="
@@ -125,6 +126,7 @@ case ${1} in
 	echo "### Normal setup ###"
 	installPM
 	installapps "$DESKTOPAPPS $CMDTOOLS"
+	has paru && installapps "$AURPKGS"
 	installthemes
 	config
 	;;
