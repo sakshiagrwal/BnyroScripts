@@ -5,7 +5,7 @@ ICONSDIR=/usr/share/icons
 GRUBDIR=/boot/grub/themes
 
 DESKTOPAPPS="librewolf-bin thunderbird gimp inkscape android-studio vscodium-bin"
-CMDTOOLS="fish helix git wget exa bat duf ffmpeg android-tools yt-dlp"
+CMDTOOLS="fish helix git wget exa bat duf bottom xh android-tools yt-dlp ffmpeg"
 
 GTKTHEMES="
 	https://github.com/vinceliuice/Orchis-theme
