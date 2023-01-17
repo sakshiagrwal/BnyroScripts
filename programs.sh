@@ -11,6 +11,9 @@ CMDTOOLS="
 	gdu
 	bottom
 	xh
+	fd
+	ripgrep
+	grex
 	zoxide
 	tealdeer
 	onefetch
