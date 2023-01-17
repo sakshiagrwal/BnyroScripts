@@ -16,7 +16,7 @@ CMDTOOLS="
 	grex
 	zoxide
 	tealdeer
-	onefetch
+	tokei
 	android-tools
 	yt-dlp
 	ffmpeg
