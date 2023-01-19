@@ -18,6 +18,7 @@ CMDTOOLS="
 	tealdeer
 	tokei
 	miniserve
+	pastel
 	android-tools
 	yt-dlp
 	ffmpeg
