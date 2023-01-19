@@ -17,6 +17,7 @@ CMDTOOLS="
 	zoxide
 	tealdeer
 	tokei
+	miniserve
 	android-tools
 	yt-dlp
 	ffmpeg
