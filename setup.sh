@@ -66,7 +66,6 @@ config() {
 		chsh -s $(which fish)
 		sudo chsh -s $(which fish)
 		sudo sed -i 's/bash/fish/' /etc/default/useradd
-		cp config.fish ~/.config/fish/config.fish
 	fi
 }
 
