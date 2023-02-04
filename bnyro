@@ -87,6 +87,15 @@ gitbranch() {
 	git rev-parse --symbolic-full-name --abbrev-ref HEAD
 }
 
+gitinit() { # repo location, # initial commit message
+	git init
+	git branch -M main
+	git add .
+	git commit -am "${2:-Initial Commit}"
+	git remote add origin "git@github.com:$1"
+	git push -u origin main
+}
+
 gitpush() { # commit message
 	[ -f "build.gradle" ] && ktlint --android -F
 	git add .
@@ -116,6 +125,7 @@ music) music $2 ;;
 append) append $2 "${@:3}" ;;
 playlist) playlist "${@:2}" ;;
 chext) chext $2 $3 ;;
+init) gitinit "$2" "$3" ;;
 push) gitpush "$2" ;;
 checkout) gitcheckout "$2" "$3" ;;
 minify) minify "$2" ;;
