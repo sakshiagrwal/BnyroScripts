@@ -97,7 +97,6 @@ gitinit() { # repo location, # initial commit message
 }
 
 gitpush() { # commit message
-	[ -f "build.gradle" ] && ktlint --android -F
 	git add .
 	git commit -am "$1"
 	git push origin "$(gitbranch)"
