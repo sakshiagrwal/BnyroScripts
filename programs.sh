@@ -1,5 +1,5 @@
 DESKTOPAPPS="thunderbird gimp inkscape"
-AURPKGS="librewolf-bin android-studio-beta vscodium-bin"
+AURPKGS="librewolf-bin android-studio-beta vscodium-bin android-tools"
 CMDTOOLS="
 	fish
 	helix
@@ -19,7 +19,7 @@ CMDTOOLS="
 	tokei
 	miniserve
 	pastel
-	android-tools
+	fzf
 	yt-dlp
 	ffmpeg
 "
