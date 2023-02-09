@@ -8,7 +8,7 @@ CMDTOOLS="
 	exa
 	bat
 	duf
-	gdu
+	dua-cli
 	bottom
 	xh
 	fd
