@@ -111,6 +111,10 @@ gitcheckout() { # name of the new branch
 	[ "$2" = "-d" ] && [ "$oldbranch" != "$mainbranch" ] && git branch -d "$oldbranch"
 }
 
+bundle() {
+	bundletool build-apks --bundle=app-release.aab --output=app-release.apks --ks=~/Documents/Linux/keys/you.jks --ks-pass="pass:$ANDROID_KEY_PASS" --ks-key-alias=you --key-pass="pass:$ANDROID_KEY_PASS"
+}
+
 selfinstall() {
 	for program in "bnyro bfetch"; do
 		sudo cp $program /usr/local/bin
@@ -129,6 +133,7 @@ push) gitpush "$2" ;;
 checkout) gitcheckout "$2" "$3" ;;
 minify) minify "$2" ;;
 rs) rs "$2" ;;
+bundle) bundle ;;
 selfinstall) selfinstall ;;
 *) update ;;
 esac
