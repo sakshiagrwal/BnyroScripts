@@ -1,5 +1,5 @@
 DESKTOPAPPS="thunderbird gimp inkscape"
-AURPKGS="librewolf-bin android-studio-beta vscodium-bin android-tools"
+AURPKGS="android-studio-beta vscodium-bin android-tools"
 CMDTOOLS="
 	fish
 	helix
