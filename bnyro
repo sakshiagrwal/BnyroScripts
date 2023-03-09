@@ -115,6 +115,10 @@ bundle() {
 	bundletool build-apks --bundle=app-release.aab --output=app-release.apks --ks=~/Documents/Linux/keys/you.jks --ks-pass="pass:$ANDROID_KEY_PASS" --ks-key-alias=you --key-pass="pass:$ANDROID_KEY_PASS"
 }
 
+bench() { # url to benchmark
+	ab -n 20000 -c 1000 "$1"
+}
+
 selfinstall() {
 	for program in "bnyro bfetch"; do
 		sudo cp $program /usr/local/bin
@@ -134,6 +138,7 @@ checkout) gitcheckout "$2" "$3" ;;
 minify) minify "$2" ;;
 rs) rs "$2" ;;
 bundle) bundle ;;
+bench) bench "$2" ;;
 selfinstall) selfinstall ;;
 *) update ;;
 esac
