@@ -111,6 +111,11 @@ gitcheckout() { # name of the new branch
 	[ "$2" = "-d" ] && [ "$oldbranch" != "$mainbranch" ] && git branch -d "$oldbranch"
 }
 
+gitrefresh() {
+	git pull
+	git push
+}
+
 bundle() {
 	bundletool build-apks --bundle=app-release.aab --output=app-release.apks --ks=~/Documents/Linux/keys/you.jks --ks-pass="pass:$ANDROID_KEY_PASS" --ks-key-alias=you --key-pass="pass:$ANDROID_KEY_PASS"
 }
@@ -135,6 +140,7 @@ chext) chext $2 $3 ;;
 init) gitinit "$2" "$3" ;;
 push) gitpush "$2" ;;
 checkout) gitcheckout "$2" "$3" ;;
+refresh) gitrefresh ;;
 minify) minify "$2" ;;
 rs) rs "$2" ;;
 bundle) bundle ;;
