@@ -6,45 +6,6 @@ has() {
 	(command -v "$1" &>/dev/null)
 }
 
-chext() { # old extension, new extension
-	old=$1
-	new=$2
-	echo "# Changing extensions from $old to $new ..."
-	find . -name "*.$old" | while read i; do
-		mv "$i" "${i%.$old}.$new"
-	done
-}
-
-playlist() { # playlist files directory
-	for playlist in "$@"; do
-		filename=${playlist##*/}
-		name=${filename/.txt//}
-		echo "# Downloading ${name} ..."
-		yt-dlp -q -f 'ba' -x --audio-format opus -o "${name}/%(title)s.%(ext)s" -a ${playlist}
-	done
-	chext opus ogg
-	echo "# Downloaded playlists succesfully"
-}
-
-music() { # song or playlist url
-	echo "# Downloading..."
-	yt-dlp -q -f 'ba' -x --audio-format opus -o '%(title)s.%(ext)s' $1
-	chext opus ogg
-}
-
-append() { # filename (not extension), urls
-	[ -f "${MUSICTXTDIR}/$1.txt" ] || exit 1
-	! [ -d ~/Music/$1 ] && mkdir cd ~/Music/$1
-	cd ~/Music/$1
-	for URL in "${@:2}"; do
-		grep -rnw $MUSICTXTDIR -e $URL && echo "URL already used" ||
-			(
-				echo "$URL" >>"${MUSICTXTDIR}/$1.txt"
-				music "$URL"
-			)
-	done
-}
-
 update() {
 	echo "### Updating System ###"
 	pm="sudo pacman" && has paru && pm="paru"
