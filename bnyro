@@ -94,10 +94,6 @@ selfinstall() {
 
 case ${1} in
 update) update ;;
-music) music $2 ;;
-append) append $2 "${@:3}" ;;
-playlist) playlist "${@:2}" ;;
-chext) chext $2 $3 ;;
 init) gitinit "$2" "$3" ;;
 push) gitpush "$2" ;;
 checkout) gitcheckout "$2" "$3" ;;
