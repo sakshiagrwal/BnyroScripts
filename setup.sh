@@ -4,7 +4,7 @@ THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
 GRUBDIR=/boot/grub/themes
 
-source "$0"/programs.sh
+source programs.sh
 
 has() {
 	(command -v "$1" &>/dev/null)
