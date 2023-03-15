@@ -53,14 +53,8 @@ installapps() { # apps
 }
 
 config() {
-	# install starship
-	curl -sS https://starship.rs/install.sh | sh
-	# install bfetch
-	sudo cp bfetch /usr/local/bin/bfetch
-	sudo chmod +x /usr/local/bin/bfetch
-	# install bnyro
-	sudo cp bnyro /usr/local/bin/bnyro
-	sudo chmod +x /usr/local/bin/bnyro
+	# install bfetch & bnyro
+	./bnyro selfinstall
 	# setup fish
 	if has fish; then
 		chsh -s $(which fish)
