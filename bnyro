@@ -85,6 +85,10 @@ bench() { # url to benchmark
 	ab -n 20000 -c 1000 "$1"
 }
 
+flash() { # sourc file, target drive
+	sudo dd if="$1" of="$2" bs=4M status=progress
+}
+
 selfinstall() {
 	for program in "bnyro bfetch"; do
 		sudo cp $program /usr/local/bin
@@ -102,6 +106,7 @@ minify) minify "$2" ;;
 rs) rs "$2" ;;
 bundle) bundle ;;
 bench) bench "$2" ;;
+flash) flash "$2" "$3" ;;
 selfinstall) selfinstall ;;
 *) update ;;
 esac
