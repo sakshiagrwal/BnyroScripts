@@ -12,6 +12,7 @@ CMDTOOLS="
 	bottom
 	xh
 	fd
+	sd
 	ripgrep
 	grex
 	zoxide
