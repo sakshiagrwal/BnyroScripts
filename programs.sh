@@ -1,4 +1,12 @@
-DESKTOPAPPS="thunderbird gimp inkscape"
+DESKTOPAPPS="
+	thunderbird
+	gimp
+	inkscape
+	cups
+	gutenprint
+	system-config-printer
+	lapce
+"
 AURPKGS="android-studio-beta vscodium-bin android-tools"
 CMDTOOLS="
 	fish
