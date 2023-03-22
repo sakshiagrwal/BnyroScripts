@@ -73,8 +73,20 @@ gitcheckout() { # name of the new branch
 }
 
 gitrefresh() {
+	git config pull.rebase true
 	git pull
 	git push
+}
+
+gitsquash() { # the upstream branch to reset to, the commit message
+	branch="$(gitbranch)"
+	git checkout -b temporary-branch
+	git checkout "$branch"
+	git reset --hard "$1"
+	git merge --squash temporary-branch
+	git branch -d temporary-branch
+	git commit -am "$2"
+	git push -f
 }
 
 bundle() {
@@ -102,6 +114,7 @@ init) gitinit "$2" "$3" ;;
 push) gitpush "$2" ;;
 checkout) gitcheckout "$2" "$3" ;;
 refresh) gitrefresh ;;
+squash) gitsquash  "$2" ;;
 minify) minify "$2" ;;
 rs) rs "$2" ;;
 bundle) bundle ;;
