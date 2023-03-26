@@ -29,6 +29,7 @@ CMDTOOLS="
 	miniserve
 	pastel
 	fzf
+	ranger
 	yt-dlp
 	ffmpeg
 "
