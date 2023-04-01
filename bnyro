@@ -7,16 +7,9 @@ has() {
 }
 
 update() {
-	echo "### Updating System ###"
-	pm="sudo pacman" && has paru && pm="paru"
-	$pm -Syu --noconfirm
-	echo "### Removing Unneeded Packages ###"
-	$pm -Rns --noconfirm $($pm -Qtdq)
-	echo "### Cleaning App Cache ###"
-	$pm -Scc --noconfirm
-	echo "### Cleaning Cache ###"
+	sudo xbps-install -Syu
+	sudo xbps-remove -O
 	sudo rm -rf ~/.cache /var/cache/* /var/tmp/*
-	echo "### Done ###"
 }
 
 minify() { # file path

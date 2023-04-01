@@ -4,49 +4,24 @@ THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
 GRUBDIR=/boot/grub/themes
 
-source programs.sh
-
 has() {
 	(command -v "$1" &>/dev/null)
 }
 
-gitinstall() { # urls, ./install.sh flags, theme/icons directory
-	for link in $1; do
-		git clone $link
-		dir=${link##*/}
-		if [ -f ${dir}/install.sh ]; then
-			sudo ./${dir}/install.sh $2
-		elif [ -f ${dir}/index.theme ]; then
-			sudo mv ${dir} "$3"
-		else
-			sudo mv ${dir}/* "$3"
-		fi
-	done
-}
-
-installthemes() {
-	mkdir ~/Themes
-	cd ~/Themes
-	echo "Installing GTK Themes ..."
-	gitinstall "$GTKTHEMES" "-d $THEMESDIR -t all" "$THEMESDIR"
-	echo "Installing Icon Themes ..."
-	gitinstall "$ICONTHEMES" "-a -d $ICONSDIR" "$ICONSDIR"
-	cd ..
-	rm -r Themes
-	echo "Downloading Grub Themes ..."
-	mkdir $GRUBDIR
-	cd $GRUBDIR
-	for grub in $GRUBTHEMES; do
-		git clone $grub
-	done
-	echo "Installed themes succesully"
+installtheme() {
+	VERSION="Catppuccin-Mocha-Standard-Rosewater-Dark"
+	mkdir -p ~/.themes
+	wget "https://github.com/catppuccin/gtk/releases/latest/download/$VERSION.zip" \
+		-P ~/.themes/
+	cd ~/.themes/
+	unzip $VERSION.zip
+	rm -rf $VERSION.zip
 }
 
 installapps() { # apps
 	for app in $1; do
 		if ! has "$app"; then
-			echo "Installing $app"
-			has paru && paru -S --noconfirm $app
+			xbps-install -Sy "$app"
 		fi
 		[ $? != 0 ] && echo "Failed to install $app"
 	done
@@ -63,35 +38,22 @@ config() {
 	fi
 }
 
-installPM() {
-	# install paru
-	! has pacman && exit 0
-	if ! has paru; then
-		sudo pacman -S --needed git base-devel
-		git clone https://aur.archlinux.org/paru.git
-		cd paru && makepkg -si
-		cd .. && rm -r paru
-	fi
-}
+APPS="$(cat programs.txt)"
+
 case ${1} in
 --headless)
-	echo "### Setup without desktop ###"
-	installPM
-	installapps "$CMDTOOLS"
+	installapps "$APPS"
 	config
 	;;
 --theme)
-	installthemes
+	installtheme
 	;;
 --config)
 	config
 	;;
 *)
-	echo "### Normal setup ###"
-	installPM
-	installapps "$DESKTOPAPPS $CMDTOOLS"
-	has paru && installapps "$AURPKGS"
-	installthemes
+	installapps "$APPS"
+	installtheme
 	config
 	;;
 esac
