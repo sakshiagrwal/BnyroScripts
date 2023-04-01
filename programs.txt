@@ -28,4 +28,5 @@ inkscape
 cups
 gutenprint
 system-config-printer
-
+firefox
+vscode
