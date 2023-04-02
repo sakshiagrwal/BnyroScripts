@@ -1,7 +1,5 @@
 #!/bin/bash
 
-MUSICTXTDIR=~/Documents/Linux/music
-
 has() {
 	(command -v "$1" &>/dev/null)
 }
@@ -94,6 +92,17 @@ flash() { # sourc file, target drive
 	sudo dd if="$1" of="$2" bs=4M status=progress
 }
 
+zig() { # Install the latest nightly zig version
+	ZIGPATH=/opt/zig
+	URL=$(curl -s https://ziglang.org/download/index.json | jq '.master."x86_64-linux".tarball' | sed 's/"//g')
+	FILE=${URL##*/}
+	FOLDER=$(echo "$FILE" | sed "s/.tar.xz//")
+	wget "$URL"
+	tar xvf "$FILE"
+	sudo rm -rf "$ZIGPATH"
+	sudo mv "$FOLDER" "$ZIGPATH"
+}
+
 selfinstall() {
 	for program in "bnyro bfetch"; do
 		sudo cp $program /usr/local/bin
@@ -113,6 +122,7 @@ rs) rs "$2" ;;
 bundle) bundle ;;
 bench) bench "$2" ;;
 flash) flash "$2" "$3" ;;
+zig) zig ;;
 selfinstall) selfinstall ;;
 *) update ;;
 esac
