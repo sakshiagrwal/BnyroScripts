@@ -9,7 +9,7 @@ has() {
 update() {
 	sudo xbps-install -Syu
 	sudo xbps-remove -O
-	sudo rm -rf ~/.cache /var/cache/* /var/tmp/*
+	sudo rm -rf /var/cache/* /var/tmp/*
 }
 
 minify() { # file path

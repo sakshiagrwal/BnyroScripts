@@ -9,13 +9,18 @@ has() {
 }
 
 installtheme() {
+	THEMEDIR=~/.themes/
 	VERSION="Catppuccin-Mocha-Standard-Rosewater-Dark"
-	mkdir -p ~/.themes
+	mkdir -p $THEMEDIR
 	wget "https://github.com/catppuccin/gtk/releases/latest/download/$VERSION.zip" \
-		-P ~/.themes/
-	cd ~/.themes/
+		-P $THEMEDIR
+	cd $THEMEDIR
 	unzip $VERSION.zip
 	rm -rf $VERSION.zip
+	mkdir -p "$HOME/.config/gtk-4.0"
+	ln -sf "$THEMEDIR/gtk-4.0/assets" "$HOME/.config/gtk-4.0/assets"
+	ln -sf "$THEMEDIR/gtk-4.0/gtk.css" "$HOME/.config/gtk-4.0/gtk.css"
+	ln -sf "$THEMEDIR/gtk-4.0/gtk-dark.css" "$HOME/.config/gtk-4.0/gtk-dark.css"
 }
 
 installapps() { # apps
