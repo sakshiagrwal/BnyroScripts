@@ -70,14 +70,14 @@ gitrefresh() {
 }
 
 gitsquash() { # the upstream branch to reset to, the commit message
+	git add .
+	git commit -am "Merge changes"
 	branch="$(gitbranch)"
-	git checkout -b temporary-branch
-	git checkout "$branch"
+	git branch temporary-branch
 	git reset --hard "$1"
 	git merge --squash temporary-branch
-	git branch -d temporary-branch
+	git branch -D temporary-branch
 	git commit -am "$2"
-	git push -f
 }
 
 bundle() {
