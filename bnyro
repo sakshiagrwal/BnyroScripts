@@ -81,7 +81,7 @@ gitsquash() { # the upstream branch to reset to, the commit message
 }
 
 bundle() {
-	bundletool build-apks --bundle=app-release.aab --output=app-release.apks --ks=~/Documents/Linux/keys/you.jks --ks-pass="pass:$ANDROID_KEY_PASS" --ks-key-alias=you --key-pass="pass:$ANDROID_KEY_PASS"
+	bundletool build-apks --bundle=app-release.aab --output=app-release.apks --ks=~/Documents/Linux/you.jks --ks-pass="pass:$ANDROID_KEY_PASS" --ks-key-alias=you --key-pass="pass:$ANDROID_KEY_PASS"
 }
 
 bench() { # url to benchmark
