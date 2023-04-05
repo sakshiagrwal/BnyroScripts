@@ -41,6 +41,8 @@ config() {
 		sudo chsh -s $(which fish)
 		sudo sed -i 's/bash/fish/' /etc/default/useradd
 	fi
+	# sudo warning forever
+	echo "Defaults	lecture = always" | sudo tee /etc/sudoers.d/privacy
 }
 
 APPS="$(cat programs.txt)"
