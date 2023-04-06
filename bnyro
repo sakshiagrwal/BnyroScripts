@@ -10,6 +10,10 @@ update() {
 	sudo rm -rf /var/cache/* /var/tmp/*
 }
 
+replace() {
+	grep -rl "$1" . | xargs sed -i "s/$1/$2/g"
+}
+
 minify() { # file path
 	if test $# -lt 1; then
 		echo Usage $0 CSS-or-JS-file
@@ -112,6 +116,7 @@ selfinstall() {
 
 case ${1} in
 update) update ;;
+replace) replace "$2" "$3" ;;
 init) gitinit "$2" "$3" ;;
 push) gitpush "$2" ;;
 checkout) gitcheckout "$2" "$3" ;;
