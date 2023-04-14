@@ -121,7 +121,7 @@ init) gitinit "$2" "$3" ;;
 push) gitpush "$2" ;;
 checkout) gitcheckout "$2" "$3" ;;
 refresh) gitrefresh ;;
-squash) gitsquash  "$2" ;;
+squash) gitsquash  "$2" "$3" ;;
 minify) minify "$2" ;;
 rs) rs "$2" ;;
 bundle) bundle ;;
