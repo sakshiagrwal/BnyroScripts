@@ -2,6 +2,7 @@
 
 THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
+FONTSDIR=/usr/share/fonts
 GRUBDIR=/boot/grub/themes
 
 has() {
@@ -23,10 +24,30 @@ installtheme() {
 	ln -sf "$THEMEDIR/gtk-4.0/gtk-dark.css" "$HOME/.config/gtk-4.0/gtk-dark.css"
 }
 
+installfont() {
+	FONTVARIANT="JetBrainsMono"
+	wget "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/$FONTVARIANT.zip"
+	unzip "$FONTVARIANT".zip
+	mv "$FONTVARIANT"/*.ttf "$FONTSDIR"/ttf/
+	rm -rf "$FONTVARIANT" "$FONTVARIANT".zip
+}
+
+getdotfiles() {
+	git clone git@github.com:Bnyro/dotfiles.git
+	rm -rf ~/.config
+	mv dotfiles ~/.config
+}
+
+installui() {
+	installtheme
+	installfont
+	getdotfiles
+}
+
 installapps() { # apps
 	for app in $1; do
 		if ! has "$app"; then
-			xbps-install -Sy "$app"
+			xbps-install -Sy "$app" || echo "Failed to install $app"
 		fi
 		[ $? != 0 ] && echo "Failed to install $app"
 	done
@@ -39,9 +60,9 @@ config() {
 	if has fish; then
 		chsh -s $(which fish)
 		sudo chsh -s $(which fish)
-		sudo sed -i 's/bash/fish/' /etc/default/useradd
+		sudo sed -i 's/bash/fish/g' /etc/default/useradd
 	fi
-	# sudo warning forever
+	# enable sudo warning forever
 	echo "Defaults	lecture = always" | sudo tee /etc/sudoers.d/privacy
 }
 
@@ -53,14 +74,14 @@ case ${1} in
 	config
 	;;
 --theme)
-	installtheme
+	installui
 	;;
 --config)
 	config
 	;;
 *)
 	installapps "$APPS"
-	installtheme
+	installui
 	config
 	;;
 esac
