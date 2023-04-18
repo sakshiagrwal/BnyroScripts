@@ -27,7 +27,7 @@ installtheme() {
 installfont() {
 	FONTVARIANT="JetBrainsMono"
 	wget "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/$FONTVARIANT.zip"
-	unzip "$FONTVARIANT".zip
+	unzip "$FONTVARIANT".zip -d "$FONTVARIANT"
 	mv "$FONTVARIANT"/*.ttf "$FONTSDIR"/ttf/
 	rm -rf "$FONTVARIANT" "$FONTVARIANT".zip
 }
