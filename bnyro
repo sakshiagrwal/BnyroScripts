@@ -99,10 +99,11 @@ flash() { # sourc file, target drive
 zig() { # Install the latest nightly zig version
 	ZIGPATH=/opt/zig
 	URL=$(curl -s https://ziglang.org/download/index.json | jq '.master."x86_64-linux".tarball' | sed 's/"//g')
-	FILE=${URL##*/}
-	FOLDER=$(echo "$FILE" | sed "s/.tar.xz//")
+	TARFILE=${URL##*/}
+	FOLDER=$(echo "$TARFILE" | sed "s/.tar.xz//")
 	wget "$URL"
-	tar xvf "$FILE"
+	tar xvf "$TARFILE"
+	rm -rf "$TARFILE"
 	sudo rm -rf "$ZIGPATH"
 	sudo mv "$FOLDER" "$ZIGPATH"
 }
