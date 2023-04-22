@@ -108,6 +108,22 @@ zig() { # Install the latest nightly zig version
 	sudo mv "$FOLDER" "$ZIGPATH"
 }
 
+rustinstall() { # git repo url, program name from Cargo.toml
+	git clone "$1"
+	REPO_NAME=$(basename "$1" .git)
+	cd "$REPO_NAME"
+	cargo build --release
+	sudo mv "target/release/$2" "/usr/local/bin/"
+	cd ..
+	rm -rf "$REPO_NAME"
+}
+
+programs() {
+	rustinstall "https://github.com/Bnyro/serve-rs.git" serve
+	rustinstall "https://github.com/Bnyro/get-rs.git" get
+	rustinstall "https://github.com/Bnyro/rename-rs.git" rn
+}
+
 selfinstall() {
 	for program in "bnyro bfetch"; do
 		sudo cp $program /usr/local/bin
@@ -129,6 +145,7 @@ bundle) bundle ;;
 bench) bench "$2" ;;
 flash) flash "$2" "$3" ;;
 zig) zig ;;
+programs) programs ;;
 selfinstall) selfinstall ;;
 *) update ;;
 esac
