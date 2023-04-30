@@ -2,6 +2,7 @@
 
 KEYSTORE_PATH=~/Documents/Linux/you.jks
 OUTPUT_DIR=~/Downloads
+PROJECTS_DIR=~/Projects
 
 has() {
 	(command -v "$1" &>/dev/null)
@@ -11,6 +12,20 @@ update() {
 	sudo xbps-install -Syu
 	sudo xbps-remove -O
 	sudo rm -rf /var/cache/* /var/tmp/*
+}
+
+pkg() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
+	cd "$PROJECTS_DIR"
+	[ ! -d "void-packages" ] && git clone "git@github.com:Bnyro/void-packages"
+	cd void-packages
+	if [ -z $2 ]; then
+		git remote add $1 "https://github.com/$2/void-packages.git"
+	fi
+	git checkout "$1"
+	./xbps-src binary-bootstrap
+	./xbps-src clean
+	./xbps-src pkg "$1"
+	xi "$1"
 }
 
 replace() {
@@ -149,6 +164,7 @@ selfinstall() {
 
 case ${1} in
 update) update ;;
+pkg) pkg "$2" "$3" ;;
 replace) replace "$2" "$3" ;;
 init) gitinit "$2" "$3" ;;
 push) gitpush "$2" ;;
