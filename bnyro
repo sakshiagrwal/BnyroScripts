@@ -121,6 +121,10 @@ apk() {
 	rm app-release-unsigned.apk
 }
 
+lint_android() {
+	ktlint --code-style=android_studio -F
+}
+
 bench() { # url to benchmark
 	ab -n 20000 -c 1000 "$1"
 }
@@ -177,6 +181,7 @@ minify) minify "$2" ;;
 rs) rs "$2" ;;
 bundle) bundle ;;
 apk) apk ;;
+ktlint) lint_android ;;
 bench) bench "$2" ;;
 flash) flash "$2" "$3" ;;
 zig) zig ;;
