@@ -12,6 +12,7 @@ update() {
 	sudo xbps-install -Syu
 	sudo xbps-remove -O
 	sudo rm -rf /var/cache/* /var/tmp/*
+	sudo vkpurge rm all
 }
 
 pkg() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
