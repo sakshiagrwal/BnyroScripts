@@ -3,6 +3,7 @@
 KEYSTORE_PATH=~/Documents/Linux/you.jks
 OUTPUT_DIR=~/Downloads
 PROJECTS_DIR=~/Projects
+USER_NAME=Bnyro
 
 has() {
 	(command -v "$1" &>/dev/null)
@@ -17,7 +18,7 @@ update() {
 
 pkg() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
 	cd "$PROJECTS_DIR"
-	[ ! -d "void-packages" ] && git clone "git@github.com:Bnyro/void-packages"
+	[ ! -d "void-packages" ] && git clone "git@github.com:$USER_NAME/void-packages"
 	cd void-packages
 	if [ -z "$2" ]; then
 		git remote add "$2" "https://github.com/$2/void-packages.git"
@@ -55,6 +56,10 @@ minify() { # file path
 rs() {
 	name=$(basename $1 .rs)
 	rustc $@ && ./$name && rm $name
+}
+
+gitclone() { # repo name
+	git clone "git@github.com:$USER_NAME/$1.git"
 }
 
 gitmainbranch() {
@@ -174,6 +179,7 @@ case ${1} in
 update) update ;;
 pkg) pkg "$2" "$3" ;;
 replace) replace "$2" "$3" ;;
+clone) gitclone "$2" ;;
 init) gitinit "$2" "$3" ;;
 push) gitpush "$2" ;;
 checkout) gitcheckout "$2" "$3" ;;
