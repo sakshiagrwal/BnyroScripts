@@ -82,7 +82,7 @@ gitinit() { # repo location, # initial commit message
 gitpush() { # commit message
 	git add .
 	git commit -am "$1"
-	git push origin "$(gitbranch)"
+	git push --set-upstream origin "$(gitbranch)"
 }
 
 gitcheckout() { # name of the new branch
