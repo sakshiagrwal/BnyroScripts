@@ -1,4 +1,3 @@
-fish
 helix
 git
 wget
@@ -18,10 +17,11 @@ tokei
 miniserve
 pastel
 fzf
-ranger
 yt-dlp
 ffmpeg
 android-tools
+syncthing
+gparted
 thunderbird
 gimp
 inkscape
@@ -29,4 +29,7 @@ cups
 gutenprint
 system-config-printer
 firefox
+intellij-idea-community-edition
+element-desktop
+NoiseTorch
 vscode

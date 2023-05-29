@@ -56,14 +56,20 @@ installapps() { # apps
 config() {
 	# install bfetch & bnyro
 	./bnyro selfinstall
-	# setup fish
-	if has fish; then
-		chsh -s $(which fish)
-		sudo chsh -s $(which fish)
-		sudo sed -i 's/bash/fish/g' /etc/default/useradd
-	fi
 	# enable sudo warning forever
 	echo "Defaults	lecture = always" | sudo tee /etc/sudoers.d/privacy
+	# set bash as default shell
+	chsh -s $(which bash)
+	sudo chsh -s $(which bash)
+	sudo sed -i 's/bash/bash/g' /etc/default/useradd
+	# install ble.sh
+	BLESH_URL=$(curl -s "https://api.github.com/repos/akinomyoga/ble.sh/releases/latest" |
+		jq ".assets[0].browser_download_url" | tr -d '"')
+	BLESH_BASE=$(basename "$BLESH_URL" ".tar.xz")
+	wget "$BLESH_URL"
+	tar xvf "$BLESH_BASE.tar.xz"
+	mv "$BLESH_BASE" ~/blesh
+	echo ". ~/config/bash/config.sh" >> ~/.bashrc
 }
 
 APPS="$(cat programs.txt)"
