@@ -1,6 +1,8 @@
 helix
 git
 wget
+curl
+jq
 exa
 bat
 duf
