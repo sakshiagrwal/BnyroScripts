@@ -100,14 +100,9 @@ gitrefresh() {
 	git push
 }
 
-gitsquash() { # the upstream branch to reset to, the commit message
+gitsquash() { # the branch or commit to reset to, the commit message
+	git reset --soft "$1"
 	git add .
-	git commit -am "Merge changes"
-	branch="$(gitbranch)"
-	git branch temporary-branch
-	git reset --hard "$1"
-	git merge --squash temporary-branch
-	git branch -D temporary-branch
 	git commit -am "$2"
 }
 
