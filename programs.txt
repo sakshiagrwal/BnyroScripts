@@ -22,6 +22,7 @@ fzf
 yt-dlp
 ffmpeg
 android-tools
+create_ap
 syncthing
 gparted
 thunderbird
