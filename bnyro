@@ -70,6 +70,10 @@ gitbranch() {
 	git rev-parse --symbolic-full-name --abbrev-ref HEAD
 }
 
+gitlastmsg() {
+	git show -s --format=%s
+}
+
 gitinit() { # repo location, # initial commit message
 	git init
 	git branch -M main
@@ -102,6 +106,10 @@ gitsquash() { # the branch or commit to reset to, the commit message
 	git reset --soft "$1"
 	git add .
 	git commit -am "$2"
+}
+
+gitappend() { # append changes to the last commit
+	gitsquash HEAD~1 "$(gitlastmsg)"
 }
 
 bundle() {
@@ -178,6 +186,7 @@ push) gitpush "$2" ;;
 remote) gitremote "$2" "$3" ;;
 refresh) gitrefresh ;;
 squash) gitsquash  "$2" "$3" ;;
+append) gitappend ;;
 minify) minify "$2" ;;
 rs) rs "$2" ;;
 bundle) bundle ;;
