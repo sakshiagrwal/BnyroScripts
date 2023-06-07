@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Needed for RegEx in the extract function
+shopt -s extglob
+
 KEYSTORE_PATH=~/Documents/Linux/you.jks
 OUTPUT_DIR=~/Downloads
 PROJECTS_DIR=~/Projects
@@ -141,6 +144,42 @@ flash() { # sourc file, target drive
 	sudo dd if="$1" of="$2" bs=4M status=progress
 }
 
+extract() {
+    local c e i
+
+    (($#)) || return
+
+    for i; do
+        c=''
+        e=1
+
+        if [[ ! -r $i ]]; then
+            echo "$0: file is unreadable: \`$i'" >&2
+            continue
+        fi
+
+        case $i in
+            *.t@(gz|lz|xz|b@(2|z?(2))|a@(z|r?(.@(Z|bz?(2)|gz|lzma|xz|zst)))))
+                   c=(tar xvf);;
+            *.7z)  c=(7z x);;
+            *.Z)   c=(uncompress);;
+            *.bz2) c=(bunzip2);;
+            *.exe) c=(cabextract);;
+            *.gz)  c=(gunzip);;
+            *.rar) c=(unrar x);;
+            *.xz)  c=(unxz);;
+            *.zip) c=(unzip);;
+            *.zst) c=(unzstd);;
+            *)     echo "$0: unrecognized file extension: \`$i'" >&2
+                   continue;;
+        esac
+
+        command "${c[@]}" "$i"
+        ((e = e || $?))
+    done
+    return "$e"
+}
+
 zig() { # Install the latest nightly zig version
 	ZIGPATH=/opt/zig
 	URL=$(curl -s https://ziglang.org/download/index.json | jq '.master."x86_64-linux".tarball' | sed 's/"//g')
@@ -194,6 +233,7 @@ apk) apk ;;
 ktlint) lint_android ;;
 bench) bench "$2" ;;
 flash) flash "$2" "$3" ;;
+extract) extract ${@:2} ;;
 zig) zig ;;
 programs) programs ;;
 selfinstall) selfinstall ;;
