@@ -72,10 +72,6 @@ APPS="$(cat programs.txt)"
 NODE="$(cat npm.txt)"
 
 case ${1} in
---headless)
-	installapps "$APPS"
-	config
-	;;
 --theme)
 	installui
 	;;

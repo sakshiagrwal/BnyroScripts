@@ -24,16 +24,13 @@ ffmpeg
 android-tools
 create_ap
 syncthing
-gparted
 thunderbird
 gimp
 inkscape
 cups
-gutenprint
-system-config-printer
 firefox
 intellij-idea-community-edition
 element-desktop
 NoiseTorch
-vscode
+blueman
 nerd-fonts-ttf
