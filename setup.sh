@@ -2,7 +2,6 @@
 
 THEMESDIR=/usr/share/themes
 ICONSDIR=/usr/share/icons
-FONTSDIR=/usr/share/fonts
 GRUBDIR=/boot/grub/themes
 
 has() {
@@ -24,14 +23,6 @@ installtheme() {
 	ln -sf "$THEMEDIR/gtk-4.0/gtk-dark.css" "$HOME/.config/gtk-4.0/gtk-dark.css"
 }
 
-installfont() {
-	FONTVARIANT="JetBrainsMono"
-	wget "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/$FONTVARIANT.zip"
-	unzip "$FONTVARIANT".zip -d "$FONTVARIANT"
-	mv "$FONTVARIANT"/*.ttf "$FONTSDIR"/ttf/
-	rm -rf "$FONTVARIANT" "$FONTVARIANT".zip
-}
-
 getdotfiles() {
 	git clone git@github.com:Bnyro/dotfiles.git
 	rm -rf ~/.config
@@ -40,14 +31,13 @@ getdotfiles() {
 
 installui() {
 	installtheme
-	installfont
 	getdotfiles
 }
 
 installapps() { # apps
 	for app in $1; do
 		if ! has "$app"; then
-			xbps-install -Sy "$app" || echo "Failed to install $app"
+			sudo xbps-install -Sy "$app" || echo "Failed to install $app"
 		fi
 		[ $? != 0 ] && echo "Failed to install $app"
 	done

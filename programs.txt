@@ -36,3 +36,4 @@ intellij-idea-community-edition
 element-desktop
 NoiseTorch
 vscode
+nerd-fonts-ttf
