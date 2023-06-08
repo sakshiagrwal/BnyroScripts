@@ -23,6 +23,12 @@ installtheme() {
 	ln -sf "$THEMEDIR/gtk-4.0/gtk-dark.css" "$HOME/.config/gtk-4.0/gtk-dark.css"
 }
 
+installgrub() {
+	git clone --depth 1 https://gitlab.com/VandalByte/darkmatter-grub-theme.git
+	cd darkmatter-grub-theme
+	sudo python3 darkmatter-theme.py --install
+}
+
 getdotfiles() {
 	git clone git@github.com:Bnyro/dotfiles.git
 	rm -rf ~/.config
@@ -32,6 +38,7 @@ getdotfiles() {
 installui() {
 	installtheme
 	getdotfiles
+	installgrub
 }
 
 installapps() { # apps
