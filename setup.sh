@@ -43,6 +43,12 @@ installapps() { # apps
 	done
 }
 
+installnode() { # packages
+	for pkg in $1; do
+		sudo npm install -g "$pkg"
+	done
+}
+
 config() {
 	# install bfetch & bnyro
 	./bnyro selfinstall
@@ -63,6 +69,7 @@ config() {
 }
 
 APPS="$(cat programs.txt)"
+NODE="$(cat npm.txt)"
 
 case ${1} in
 --headless)
@@ -77,6 +84,7 @@ case ${1} in
 	;;
 *)
 	installapps "$APPS"
+	installnode "$NODE"
 	installui
 	config
 	;;
