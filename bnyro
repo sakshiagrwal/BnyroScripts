@@ -36,6 +36,10 @@ pkg() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
 	xi "$1"
 }
 
+updatecheck() {
+	xpkg -m | while read line; do ./xbps-src update-check $line & done
+}
+
 replace() {
 	grep -rl "$1" . | xargs sed -i "s/$1/$2/g"
 }
@@ -218,6 +222,7 @@ selfinstall() {
 case ${1} in
 update) update ;;
 pkg) pkg "$2" "$3" ;;
+updatecheck) updatecheck ;;
 replace) replace "$2" "$3" ;;
 clone) gitclone "$2" ;;
 init) gitinit "$2" "$3" ;;
