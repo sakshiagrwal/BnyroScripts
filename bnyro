@@ -5,39 +5,9 @@ shopt -s extglob
 
 KEYSTORE_PATH=~/Documents/Linux/you.jks
 OUTPUT_DIR=~/Downloads
-PROJECTS_DIR=~/Projects
-USER_NAME=Bnyro
 
 has() {
 	(command -v "$1" &>/dev/null)
-}
-
-update() {
-	sudo xbps-install -Syu
-	sudo xbps-remove -O
-	sudo rm -rf /var/cache/* /var/tmp/*
-	sudo vkpurge rm all
-}
-
-pkg() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
-	cd "$PROJECTS_DIR"
-	[ ! -d "void-packages" ] && git clone "git@github.com:$USER_NAME/void-packages"
-	cd void-packages
-	if [ -z "$2" ]; then
-		git remote add "$2" "https://github.com/$2/void-packages.git"
-		git fetch "$2"
-		git checkout "$2"/"$1"
-	else
-		git checkout "$1"
-	fi
-	./xbps-src binary-bootstrap
-	./xbps-src clean
-	./xbps-src pkg "$1"
-	xi "$1"
-}
-
-updatecheck() {
-	xpkg -m | while read line; do ./xbps-src update-check $line & done
 }
 
 replace() {
@@ -213,16 +183,13 @@ programs() {
 }
 
 selfinstall() {
-	for program in "bnyro bfetch"; do
+	for program in "bnyro bfetch pkg"; do
 		sudo cp $program /usr/local/bin
 		sudo chmod +x /usr/local/bin/$program
 	done
 }
 
 case ${1} in
-update) update ;;
-pkg) pkg "$2" "$3" ;;
-updatecheck) updatecheck ;;
 replace) replace "$2" "$3" ;;
 clone) gitclone "$2" ;;
 init) gitinit "$2" "$3" ;;
@@ -242,5 +209,4 @@ extract) extract ${@:2} ;;
 zig) zig ;;
 programs) programs ;;
 selfinstall) selfinstall ;;
-*) update ;;
 esac
