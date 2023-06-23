@@ -47,14 +47,17 @@ update() {
 	sudo vkpurge rm all
 }
 
-updatecheck() {
+check() {
 	prep_pkgs
-	xpkg -m | while read line; do ./xbps-src update-check $line & done
+	packages=$(xpkg "$1" | while read line; do
+		./xbps-src update-check $line 2> /dev/null &
+	done)
+	echo "$packages" | tac | sort -u -t ">" -k1,1
 }
 
 case ${1} in
 update) update ;;
-updatecheck) updatecheck ;;
+check) check "$2" ;;
 pkg) pkg "$2" "$3" ;;
 bump) bump "$2" "$3" ;;
 esac
