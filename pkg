@@ -1,12 +1,11 @@
 #!/usr/bin/bash
 
-PROJECTS_DIR=~/Projects
 USER_NAME=Bnyro
+VOID_DIR=~/Projects/void-packages
 
 prep_pkgs() {
-	cd "$PROJECTS_DIR"
-	[ ! -d "void-packages" ] && git clone "git@github.com:$USER_NAME/void-packages"
-	cd "void-packages"
+	[ ! -d "$VOID_DIR" ] && git clone "git@github.com:$USER_NAME/void-packages" "$VOID_DIR"
+	cd "$VOID_DIR"
 }
 
 pkg() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
@@ -22,6 +21,19 @@ pkg() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
 	./xbps-src clean
 	./xbps-src pkg "$1"
 	xi "$1"
+}
+
+bump() { # package name, new version to update to
+	prep_pkgs
+	git checkout -b "$1"
+	git reset --hard upstream/master
+	sed -i "0,/version=[0-9\.]*/s//version=$2/" "srcpkgs/$1/template"
+	xgensum -i "$1"
+	./xbps-src pkg "$1" || exit 1
+	xi -y "$1"
+	xbump "$1"
+	git push --set-upstream origin "$1"
+	git checkout master
 }
 
 update() {
@@ -40,4 +52,5 @@ case ${1} in
 update) update ;;
 updatecheck) updatecheck ;;
 pkg) pkg "$2" "$3" ;;
+bump) bump "$2" "$3" ;;
 esac
