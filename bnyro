@@ -106,8 +106,8 @@ apk() {
 	rm app-release-unsigned.apk
 }
 
-mesonbuild() {
-	meson _build
+mesonbuild() { # arguments for the build
+	meson _build $@
 	ninja -C _build
 	sudo ninja -C _build install
 }
@@ -204,7 +204,7 @@ minify) minify "$2" ;;
 rs) rs "$2" ;;
 bundle) bundle ;;
 apk) apk ;;
-meson) mesonbuild ;;
+meson) mesonbuild ${@:2} ;;
 bench) bench "$2" ;;
 flash) flash "$2" "$3" ;;
 extract) extract ${@:2} ;;
