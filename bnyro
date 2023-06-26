@@ -106,8 +106,10 @@ apk() {
 	rm app-release-unsigned.apk
 }
 
-lint_android() {
-	ktlint --code-style=android_studio -F
+meson() {
+	meson _build
+	ninja -C _build
+	sudo ninja -C _build install
 }
 
 bench() { # url to benchmark
@@ -202,7 +204,7 @@ minify) minify "$2" ;;
 rs) rs "$2" ;;
 bundle) bundle ;;
 apk) apk ;;
-ktlint) lint_android ;;
+meson) meson ;;
 bench) bench "$2" ;;
 flash) flash "$2" "$3" ;;
 extract) extract ${@:2} ;;
