@@ -4,8 +4,16 @@ USER_NAME=Bnyro
 VOID_DIR=~/Projects/void-packages
 
 prep_pkgs() {
-	[ ! -d "$VOID_DIR" ] && git clone "git@github.com:$USER_NAME/void-packages" "$VOID_DIR"
-	cd "$VOID_DIR"
+	if [ ! -d "$VOID_DIR" ]; then
+		git clone "git@github.com:$USER_NAME/void-packages" "$VOID_DIR"
+		cd "$VOID_DIR"
+		git remote add upstream "https://github.com/void-linux/void-packages.git"
+		git fetch upstream
+		git reset --hard upstream/master
+		git push
+	else
+		cd "$VOID_DIR"
+	fi
 }
 
 build() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
@@ -14,6 +22,7 @@ build() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
 		git remote add "$2" "https://github.com/$2/void-packages.git"
 		git fetch "$2"
 		git checkout "$2"/"$1"
+		git merge upstream/master --no-edit
 	else
 		git checkout "$1"
 	fi
