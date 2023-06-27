@@ -8,9 +8,9 @@ prep_pkgs() {
 	cd "$VOID_DIR"
 }
 
-pkg() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
+build() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
 	prep_pkgs
-	if [ -z "$2" ]; then
+	if [ "$2" ]; then
 		git remote add "$2" "https://github.com/$2/void-packages.git"
 		git fetch "$2"
 		git checkout "$2"/"$1"
@@ -58,6 +58,6 @@ check() {
 case ${1} in
 update) update ;;
 check) check "$2" ;;
-pkg) pkg "$2" "$3" ;;
+build) build "$2" "$3" ;;
 bump) bump "$2" "$3" ;;
 esac
