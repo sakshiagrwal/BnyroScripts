@@ -58,7 +58,7 @@ update() {
 
 check() {
 	prep_pkgs
-	packages=$(xpkg "$1" | sed '/^.*32bit$/d')
+	packages=$(xpkg "$1" | sed '/^.*32bit$/d' | sed '/^.*-devel$/d')
 	updates=$(echo "$packages" | while read line; do
 		./xbps-src update-check $line 2>/dev/null &
 	done)
