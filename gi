@@ -19,14 +19,14 @@ gitlastmsg() {
 gitinit() { # repo location, # initial commit message
 	git init
 	git branch -M main
-	git add .
+	git add -A
 	git commit -am "${2:-Initial Commit}"
 	git remote add origin "git@github.com:$1"
 	git push -u origin main
 }
 
 gitpush() { # commit message
-	git add .
+	git add -A
 	git commit -am "$1"
 	git push --set-upstream origin "$(gitbranch)"
 }
@@ -46,7 +46,7 @@ gitrefresh() {
 
 gitsquash() { # the branch or commit to reset to, the commit message
 	git reset --soft "$1"
-	git add .
+	git add -A
 	git commit -am "$2"
 }
 
