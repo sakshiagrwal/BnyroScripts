@@ -58,10 +58,11 @@ update() {
 
 check() {
 	prep_pkgs
-	packages=$(xpkg "$1" | while read line; do
+	packages=$(xpkg "$1" | sed '/^.*32bit$/d')
+	updates=$(echo "$packages" | while read line; do
 		./xbps-src update-check $line 2>/dev/null &
 	done)
-	echo "$packages" | tac | sort -u -t ">" -k1,1
+	echo "$updates" | tac | sort -u -t ">" -k1,1
 }
 
 case ${1} in
