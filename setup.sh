@@ -72,7 +72,7 @@ config() {
 	wget "$BLESH_URL"
 	tar xvf "$BLESH_BASE.tar.xz"
 	mv "$BLESH_BASE" ~/blesh
-	echo ". ~/config/bash/config.sh" >> ~/.bashrc
+	echo ". ~/config/bash/config.sh" >>~/.bashrc
 }
 
 APPS="$(cat programs.txt)"

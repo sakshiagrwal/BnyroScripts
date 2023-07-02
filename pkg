@@ -59,7 +59,7 @@ update() {
 check() {
 	prep_pkgs
 	packages=$(xpkg "$1" | while read line; do
-		./xbps-src update-check $line 2> /dev/null &
+		./xbps-src update-check $line 2>/dev/null &
 	done)
 	echo "$packages" | tac | sort -u -t ">" -k1,1
 }
