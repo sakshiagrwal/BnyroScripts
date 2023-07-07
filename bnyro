@@ -53,7 +53,7 @@ apk() {
 }
 
 mesonbuild() { # arguments for the build
-	meson _build $@
+	meson --prefix="/usr" _build $@
 	ninja -C _build
 	sudo ninja -C _build install
 }
