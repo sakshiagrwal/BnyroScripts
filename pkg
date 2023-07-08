@@ -30,6 +30,7 @@ build() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
 	./xbps-src clean
 	./xbps-src pkg "$1"
 	xi "$1"
+	git checkout master
 }
 
 bump() { # package name, new version to update to
