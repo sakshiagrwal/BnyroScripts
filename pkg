@@ -11,9 +11,15 @@ prep_pkgs() {
 		git fetch upstream
 		git reset --hard upstream/master
 		git push
+		./xbps-src binary-bootstrap
+		./xbps-src clean
 	else
 		cd "$VOID_DIR"
 	fi
+}
+pkg_install() { # package name
+	./xbps-src pkg "$1" || exit 1
+	xi -y "$1"
 }
 
 build() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
@@ -26,15 +32,21 @@ build() { # package/branch name, (optional) github user name of fork, e.g. Bnyro
 	else
 		git checkout "$1"
 	fi
-	./xbps-src binary-bootstrap
-	./xbps-src clean
-	./xbps-src pkg "$1"
-	xi "$1"
+	pkg_install "$1"
+	git checkout master
+}
+
+commit() { # package name
+	xgensum -i "$1"
+	pkg_install "$1" || exit 1
+	xbump "$1"
+	git push --set-upstream origin --force "$1"
 	git checkout master
 }
 
 bump() { # package name, new version to update to
 	prep_pkgs
+	git branch -D "$1"
 	git checkout -b "$1"
 	git reset --hard upstream/master
 	TEMPLATE="srcpkgs/$1/template"
@@ -42,12 +54,7 @@ bump() { # package name, new version to update to
 	sed -i "0,/version=[0-9\.]*/s//version=$2/" "$TEMPLATE"
 	# reset the revision
 	sed -i "0,/revision=[0-9]*/s//revision=1/" "$TEMPLATE"
-	xgensum -i "$1"
-	./xbps-src pkg "$1" || exit 1
-	xi -y "$1"
-	xbump "$1"
-	git push --set-upstream origin "$1"
-	git checkout master
+	commit "$1"
 }
 
 update() {
@@ -71,4 +78,5 @@ update) update ;;
 check) check "$2" ;;
 build) build "$2" "$3" ;;
 bump) bump "$2" "$3" ;;
+commit) commit "$2" ;;
 esac
