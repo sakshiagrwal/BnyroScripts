@@ -62,6 +62,11 @@ gitreset() { # upstream to reset to
 	git push
 }
 
+# delete all branches that don't exist at the remote repo
+gitcleanbranches() {
+	git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D
+}
+
 case ${1} in
 clone) gitclone "$2" ;;
 init) gitinit "$2" "$3" ;;
@@ -70,5 +75,6 @@ remote) gitremote "$2" "$3" ;;
 refresh) gitrefresh ;;
 squash) gitsquash "$2" "$3" ;;
 append) gitappend ;;
+clean) gitcleanbranches ;;
 reset) gitreset "$2" ;;
 esac
