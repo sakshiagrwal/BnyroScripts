@@ -75,7 +75,8 @@ config() {
 	echo ". ~/config/bash/config.sh" >>~/.bashrc
 }
 
-APPS="$(cat programs.txt)"
+CLIAPPS="$(cat cli.txt)"
+GUIAPPS="$(cat gui.txt)"
 NODE="$(cat npm.txt)"
 
 case ${1} in
@@ -86,7 +87,8 @@ case ${1} in
 	config
 	;;
 *)
-	installapps "$APPS"
+	installapps "$CLIAPPS"
+	installapps "$GUIAPPS"
 	installnode "$NODE"
 	installui
 	config
