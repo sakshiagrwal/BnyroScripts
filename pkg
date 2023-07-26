@@ -57,6 +57,19 @@ bump() { # package name, new version to update to
 	commit "$1"
 }
 
+pr() { # test state (YES, briefly), pr title (optional)
+	[ -z "$1" ] && exit 1
+	TITLE=$(git show -s --format=%s)
+	[ "$2" ] && TITLE="$2"
+	echo "
+#### Testing the changes
+- I tested the changes in this PR: **$1**
+
+#### Local build testing
+- I built this PR locally for my native architecture, x86_64-glibc
+" | gh pr create --title "$TITLE" --body-file -
+}
+
 update() {
 	sudo xbps-install -Syu
 	sudo xbps-remove -O
@@ -79,4 +92,5 @@ check) check "$2" ;;
 build) build "$2" "$3" ;;
 bump) bump "$2" "$3" ;;
 commit) commit "$2" ;;
+pr) pr "$2" "$3" ;;
 esac
