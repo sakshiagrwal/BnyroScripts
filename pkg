@@ -50,7 +50,7 @@ bump() { # package name, new version to update to
 	git reset --hard upstream/master
 	TEMPLATE="srcpkgs/$1/template"
 	# update the version
-	sed -i "0,/version=[0-9\.]*/s//version=$2/" "$TEMPLATE"
+	sed -i "0,/version=[0-9a-z\.]*/s//version=$2/" "$TEMPLATE"
 	# reset the revision
 	sed -i "0,/revision=[0-9]*/s//revision=1/" "$TEMPLATE"
 	commit "$1"
