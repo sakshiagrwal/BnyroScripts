@@ -86,6 +86,13 @@ check() {
 	echo "$updates" | tac | sort -u -t ">" -k1,1
 }
 
+reset() {
+	OLDBRANCH=$(git rev-parse --abbrev-ref HEAD)
+	git checkout master
+	git reset --hard
+	git branch -D "$OLDBRANCH"
+}
+
 case ${1} in
 update) update ;;
 check) check "$2" ;;
@@ -93,4 +100,5 @@ build) build "$2" "$3" ;;
 bump) bump "$2" "$3" ;;
 commit) commit "$2" ;;
 pr) pr "$2" "$3" ;;
+reset) reset ;;
 esac
