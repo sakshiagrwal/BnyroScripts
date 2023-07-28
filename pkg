@@ -93,6 +93,18 @@ reset() {
 	git branch -D "$OLDBRANCH"
 }
 
+orphan() { # maintainer field of person to orphan
+	prep_pkgs
+	NAME="$(echo "$1" | cut -d '<' -f 1 | sed 's/ $//')"
+	BRANCH="orphan-${NAME/ /-}"
+	git checkout -b "$BRANCH"
+	grep -Ril "$1" srcpkgs/**/* 2> /dev/null | while read template; do
+		sed -i "0,/maintainer=.*/s//maintainer=\"Orphaned <orphan@voidlinux.org>\"/" "$template"
+	done
+	git commit -am "srcpkgs: orphan $NAME's packages"
+	git push --set-upstream origin "$BRANCH"
+}
+
 case ${1} in
 update) update ;;
 check) check "$2" ;;
@@ -101,4 +113,5 @@ bump) bump "$2" "$3" ;;
 commit) commit "$2" ;;
 pr) pr "$2" "$3" ;;
 reset) reset ;;
+orphan) orphan "$2" ;;
 esac
