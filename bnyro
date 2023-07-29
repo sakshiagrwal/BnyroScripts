@@ -133,6 +133,10 @@ programs() {
 	rustinstall "https://github.com/Bnyro/rename-rs.git" rn
 }
 
+nohupexec() { # command to execute
+	 nohup ${@} > /dev/null 2>&1&
+}
+
 selfinstall() {
 	for program in "bnyro bfetch pkg gi"; do
 		sudo cp $program /usr/local/bin
@@ -152,5 +156,6 @@ flash) flash "$2" "$3" ;;
 extract) extract ${@:2} ;;
 zig) zig ;;
 programs) programs ;;
+nohup) nohupexec ${@:2} ;;
 selfinstall) selfinstall ;;
 esac
