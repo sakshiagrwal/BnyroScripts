@@ -1,7 +1,7 @@
 #!/bin/bash
 
-gitclone() { # repo name
-	git clone "git@github.com:$USER_NAME/$1.git"
+gitclone() { # username/reponame
+	git clone "git@github.com:$1.git"
 }
 
 gitmainbranch() {
@@ -10,10 +10,6 @@ gitmainbranch() {
 
 gitbranch() {
 	git rev-parse --symbolic-full-name --abbrev-ref HEAD
-}
-
-gitlastmsg() {
-	git show -s --format=%s
 }
 
 gitinit() { # repo location, # initial commit message
@@ -25,10 +21,10 @@ gitinit() { # repo location, # initial commit message
 	git push -u origin main
 }
 
-gitpush() { # commit message
+gitpush() { # commit message, git push flags
 	git add -A
 	git commit -am "$1"
-	git push --set-upstream origin "$(gitbranch)"
+	git push --set-upstream origin "$(gitbranch)" ${@:2}
 }
 
 gitremote() { # remote url, branch
@@ -51,7 +47,8 @@ gitsquash() { # the branch or commit to reset to, the commit message
 }
 
 gitappend() { # append changes to the last commit
-	gitsquash HEAD~1 "$(gitlastmsg)"
+	git add -A
+	git commit --amend --no-edit
 }
 
 gitreset() { # upstream to reset to
@@ -70,7 +67,7 @@ gitcleanbranches() {
 case ${1} in
 clone) gitclone "$2" ;;
 init) gitinit "$2" "$3" ;;
-push) gitpush "$2" ;;
+push) gitpush "$2" ${@:3} ;;
 remote) gitremote "$2" "$3" ;;
 refresh) gitrefresh ;;
 squash) gitsquash "$2" "$3" ;;
