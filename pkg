@@ -91,6 +91,7 @@ reset() {
 	git checkout master
 	git reset --hard
 	git branch -D "$OLDBRANCH"
+	git push origin -d "$OLDBRANCH"
 }
 
 orphan() { # maintainer field of person to orphan
