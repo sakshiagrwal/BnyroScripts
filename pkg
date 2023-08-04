@@ -106,6 +106,10 @@ orphan() { # maintainer field of person to orphan
 	git push --set-upstream origin "$BRANCH"
 }
 
+search() {
+	 gh search prs --state open --repo void-linux/void-packages --match title "$1"
+}
+
 case ${1} in
 update) update ;;
 check) check "$2" ;;
@@ -115,4 +119,5 @@ commit) commit "$2" ;;
 pr) pr "$2" "$3" ;;
 reset) reset ;;
 orphan) orphan "$2" ;;
+search) search "$2" ;;
 esac
