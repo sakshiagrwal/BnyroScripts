@@ -137,13 +137,6 @@ nohupexec() { # command to execute
 	 nohup ${@} > /dev/null 2>&1&
 }
 
-selfinstall() {
-	for program in "bnyro bfetch pkg gi"; do
-		sudo cp $program /usr/local/bin
-		sudo chmod +x /usr/local/bin/$program
-	done
-}
-
 case ${1} in
 replace) replace "$2" "$3" ;;
 minify) minify "$2" ;;
@@ -157,5 +150,4 @@ extract) extract ${@:2} ;;
 zig) zig ;;
 programs) programs ;;
 nohup) nohupexec ${@:2} ;;
-selfinstall) selfinstall ;;
 esac
