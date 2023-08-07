@@ -106,8 +106,12 @@ orphan() { # maintainer field of person to orphan
 	git push --set-upstream origin "$BRANCH"
 }
 
-search() {
-	 gh search prs --state open --repo void-linux/void-packages --match title "$1"
+search() { # query, cmd flags
+	gh search prs --state open --repo void-linux/void-packages --match title "$1" ${@:2}
+}
+
+maintainer() { # pkg name
+	cat "srcpkgs/$1/template" | grep "maintainer=" | cut -d "=" -f 2 | tr -d '"'
 }
 
 case ${1} in
@@ -119,5 +123,6 @@ commit) commit "$2" ;;
 pr) pr "$2" "$3" ;;
 reset) reset ;;
 orphan) orphan "$2" ;;
-search) search "$2" ;;
+search) search ${@:2} ;;
+who) maintainer "$2" ;;
 esac
