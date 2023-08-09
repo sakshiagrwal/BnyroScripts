@@ -83,7 +83,8 @@ check() {
 	updates=$(echo "$packages" | while read line; do
 		./xbps-src update-check $line 2>/dev/null &
 	done)
-	echo "$updates" | tac | sort -u -t ">" -k1,1
+	outdated=$(echo "$updates" | tac | sort -u -t ">" -k1,1)
+	echo -e "$outdated" "\n\nOutdated packages:" $(echo "$outdated" | wc -l)
 }
 
 reset() {
