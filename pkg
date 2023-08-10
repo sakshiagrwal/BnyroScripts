@@ -1,12 +1,12 @@
 #!/usr/bin/bash
 
-USER_NAME=Bnyro
-VOID_DIR=~/Projects/void-packages
+USERNAME=Bnyro
+VOIDDIR=~/Projects/void-packages
 
 prep_pkgs() {
 	if [ ! -d "$VOID_DIR" ]; then
-		git clone "git@github.com:$USER_NAME/void-packages" "$VOID_DIR"
-		cd "$VOID_DIR"
+		git clone "git@github.com:$USERNAME/void-packages" "$VOIDDIR"
+		cd "$VOIDDIR"
 		git remote add upstream "https://github.com/void-linux/void-packages.git"
 		git fetch upstream
 		git reset --hard upstream/master
@@ -14,7 +14,7 @@ prep_pkgs() {
 		./xbps-src binary-bootstrap
 		./xbps-src clean
 	else
-		cd "$VOID_DIR"
+		cd "$VOIDDIR"
 	fi
 }
 pkg_install() { # package name
@@ -43,30 +43,41 @@ commit() { # package name
 	git push --set-upstream origin --force "$1"
 }
 
-bump() { # package name, new version to update to
+bump() { # package name, new version to update to, -{a,o} to adopt or orphan (optional)
 	prep_pkgs
 	git branch -D "$1"
 	git checkout -b "$1"
 	git reset --hard upstream/master
-	TEMPLATE="srcpkgs/$1/template"
+	template="srcpkgs/$1/template"
 	# update the version
-	sed -i "0,/version=[0-9a-z\.]*/s//version=$2/" "$TEMPLATE"
+	sed -i "0,/version=[0-9a-z\.]*/s//version=$2/" "$template"
 	# reset the revision
-	sed -i "0,/revision=[0-9]*/s//revision=1/" "$TEMPLATE"
+	sed -i "0,/revision=[0-9]*/s//revision=1/" "$template"
+	# update the maintainer if specified
+	case $3 in
+		-o) 
+			sed -i "0,/maintainer=.*/s//maintainer=\"Orphaned <orphan@voidlinux.org>\"/" "$template"
+			;;
+		-a)
+			username=$(git config user.name)
+			email=$(git config user.email)
+			sed -i "0,/maintainer=.*/s//maintainer=\"$username <$email>\"/" "$template"
+			;;
+	esac
 	commit "$1"
 }
 
 pr() { # test state (YES, briefly), pr title (optional)
 	[ -z "$1" ] && exit 1
-	TITLE=$(git show -s --format=%s)
-	[ "$2" ] && TITLE="$2"
+	title=$(git show -s --format=%s)
+	[ "$2" ] && title="$2"
 	echo "
 #### Testing the changes
 - I tested the changes in this PR: **$1**
 
 #### Local build testing
 - I built this PR locally for my native architecture, x86_64-glibc
-" | gh pr create --title "$TITLE" --body-file -
+" | gh pr create --title "$title" --body-file -
 	git checkout master
 }
 
@@ -88,23 +99,23 @@ check() {
 }
 
 reset() {
-	OLDBRANCH=$(git rev-parse --abbrev-ref HEAD)
+	oldbranc=$(git rev-parse --abbrev-ref HEAD)
 	git checkout master
 	git reset --hard
-	git branch -D "$OLDBRANCH"
-	git push origin -d "$OLDBRANCH"
+	git branch -D "$oldbranc"
+	git push origin -d "$oldbranch"
 }
 
 orphan() { # maintainer field of person to orphan
 	prep_pkgs
-	NAME="$(echo "$1" | cut -d '<' -f 1 | sed 's/ $//')"
-	BRANCH="orphan-${NAME/ /-}"
-	git checkout -b "$BRANCH"
+	name="$(echo "$1" | cut -d '<' -f 1 | sed 's/ $//')"
+	branch="orphan-${name/ /-}"
+	git checkout -b "$branch"
 	grep -Ril "$1" srcpkgs/**/* 2> /dev/null | while read template; do
 		sed -i "0,/maintainer=.*/s//maintainer=\"Orphaned <orphan@voidlinux.org>\"/" "$template"
 	done
-	git commit -am "srcpkgs: orphan $NAME's packages"
-	git push --set-upstream origin "$BRANCH"
+	git commit -am "srcpkgs: orphan $name's packages"
+	git push --set-upstream origin "$branch"
 }
 
 search() { # query, cmd flags
@@ -119,7 +130,7 @@ case ${1} in
 update) update ;;
 check) check "$2" ;;
 build) build "$2" "$3" ;;
-bump) bump "$2" "$3" ;;
+bump) bump "$2" "$3" "$4" ;;
 commit) commit "$2" ;;
 pr) pr "$2" "$3" ;;
 reset) reset ;;
