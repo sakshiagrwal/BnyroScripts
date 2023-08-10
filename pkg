@@ -4,7 +4,7 @@ USERNAME=Bnyro
 VOIDDIR=~/Projects/void-packages
 
 prep_pkgs() {
-	if [ ! -d "$VOID_DIR" ]; then
+	if [ ! -d "$VOIDDIR" ]; then
 		git clone "git@github.com:$USERNAME/void-packages" "$VOIDDIR"
 		cd "$VOIDDIR"
 		git remote add upstream "https://github.com/void-linux/void-packages.git"
