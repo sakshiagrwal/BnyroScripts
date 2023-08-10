@@ -46,7 +46,8 @@ commit() { # package name
 bump() { # package name, new version to update to, -{a,o} to adopt or orphan (optional)
 	prep_pkgs
 	git branch -D "$1"
-	git checkout -b "$1" upstream/master
+	git checkout -b "$1"
+	git reset --hard upstream/master
 	template="srcpkgs/$1/template"
 	# update the version
 	sed -i "0,/version=[0-9a-z\.]*/s//version=$2/" "$template"
