@@ -40,7 +40,12 @@ commit() { # package name
 	xgensum -i "$1"
 	pkg_install "$1" || exit 1
 	xbump "$1"
-	git push --set-upstream origin --force "$1"
+	git push --set-upstream origin --force "$(git branch --show-current)"
+
+	echo ""
+	xlint "$1" || exit 1
+	search "$1"
+	echo ""
 }
 
 bump() { # package name, new version to update to, -{a,o} to adopt or orphan (optional)
