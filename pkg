@@ -42,9 +42,9 @@ commit() { # package name
 	xbump "$1"
 	git push --set-upstream origin --force "$(git branch --show-current)"
 
-	echo ""
-	xlint "$1" || exit 1
+	echo -e "\nMaintainer: $(maintainer $1)"
 	search "$1"
+	xlint "$1" || exit 1
 	echo ""
 }
 
