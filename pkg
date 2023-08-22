@@ -104,10 +104,10 @@ check() {
 }
 
 reset() {
-	oldbranc=$(git rev-parse --abbrev-ref HEAD)
+	oldbranch=$(git rev-parse --abbrev-ref HEAD)
 	git checkout master
 	git reset --hard
-	git branch -D "$oldbranc"
+	git branch -D "$oldbranch"
 	git push origin -d "$oldbranch"
 }
 
@@ -128,6 +128,7 @@ search() { # query, cmd flags
 }
 
 maintainer() { # pkg name
+	prep_pkgs
 	cat "srcpkgs/$1/template" | grep "maintainer=" | cut -d "=" -f 2 | tr -d '"'
 }
 
