@@ -2,6 +2,7 @@
 
 USERNAME=Bnyro
 VOIDDIR=~/Projects/void-packages
+VOIDREPO="https://repo-default.voidlinux.org"
 
 prep_pkgs() {
 	if [ ! -d "$VOIDDIR" ]; then
@@ -93,14 +94,32 @@ update() {
 	sudo vkpurge rm all
 }
 
-check() {
+parse_pkg_block() { # outdated pkg list
+	installed=$(xpkg | sed -e '/^.*32bit$/d' -e '/^.*-devel$/d' -e '/^lib.*$/d')
+	installed=$(echo -e "\n$installed\n")
+	echo "$1" | while read line; do
+		pkgname=$(echo $line | cut -d " " -f 1)
+		if [ -z "$line" ] || [[ "$line" = "------"* ]]; then
+			continue
+		elif [[ "$line" =~ .+@.+ ]]; then
+			currentmaintainer="$line"
+		elif echo "$installed" | grep -zoP "\n$pkgname\n" &> /dev/null; then
+			echo $(echo $line | sed 's/  \+/   /g') $currentmaintainer
+		fi
+	done
+}
+
+check_pkgs() {
 	prep_pkgs
-	packages=$(xpkg "$1" | sed '/^.*32bit$/d' | sed '/^.*-devel$/d' | sed '/^lib.*$/d')
-	updates=$(echo "$packages" | while read line; do
-		./xbps-src update-check $line 2>/dev/null &
-	done)
-	outdated=$(echo "$updates" | tac | sort -u -t ">" -k1,1)
-	echo -e "$outdated" "\n\nOutdated packages:" $(echo "$outdated" | wc -l)
+	usermail=$(git config user.email)
+	echo "Outdated packages of $usermail:"
+	curl -s "$VOIDREPO/void-updates/void-updates/updates_$usermail.txt"
+	echo "========================================="
+	outdatedall=$(curl -s "$VOIDREPO/void-updates/void-updates.txt" | tail -n +4)
+	outdateddeduped="$(echo "$outdatedall" | tac | awk '!seen[$1]++' | tac)"
+	outdated="$(parse_pkg_block "$outdateddeduped")"
+	echo "$outdated" | sort
+	echo -e "\nOutdated packages total: $(echo "$outdated" | wc -l)"
 }
 
 reset() {
@@ -134,7 +153,7 @@ maintainer() { # pkg name
 
 case ${1} in
 update) update ;;
-check) check "$2" ;;
+check) check_pkgs ;;
 build) build "$2" "$3" ;;
 bump) bump "$2" "$3" "$4" ;;
 commit) commit "$2" ;;
