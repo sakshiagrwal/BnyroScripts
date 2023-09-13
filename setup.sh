@@ -75,6 +75,22 @@ config() {
 	echo ". ~/config/bash/config.sh" >>~/.bashrc
 }
 
+rustinstall() { # git repo url, program name from Cargo.toml
+	git clone "$1"
+	REPO_NAME=$(basename "$1" .git)
+	cd "$REPO_NAME"
+	cargo build --release
+	sudo mv "target/release/$2" "/usr/local/bin/"
+	cd ..
+	rm -rf "$REPO_NAME"
+}
+
+rs_programs() {
+	rustinstall "https://github.com/Bnyro/serve-rs.git" serve
+	rustinstall "https://github.com/Bnyro/get-rs.git" get
+	rustinstall "https://github.com/Bnyro/rename-rs.git" rn
+}
+
 CLIAPPS="$(cat cli.txt)"
 GUIAPPS="$(cat gui.txt)"
 NODE="$(cat npm.txt)"
@@ -86,11 +102,15 @@ case ${1} in
 --config)
 	config
 	;;
+--rust)
+	rs_programs
+	;;
 *)
 	installapps "$CLIAPPS"
 	installapps "$GUIAPPS"
 	installnode "$NODE"
 	installui
+	rs_programs
 	config
 	;;
 esac

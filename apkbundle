@@ -1,0 +1,11 @@
+#!/bin/bash
+
+OUTPUT_DIR=${OUTPUT_DIR:-"$HOME/Downloads"}
+
+## Required env: ANDROID_KEYSTORE_PATH, ANDROID_KEY_ALIAS, ANDROID_KEY_PASS
+## Usage <bundle name> (defaults to app-release.aab)
+
+./gradlew bundleRelease
+mv app/build/outputs/bundle/release/app-release.aab $OUTPUT_DIR
+cd $OUTPUT_DIR
+bundletool build-apks --bundle=${1:-"app-release.aab"} --output=app-release.apks --ks="$ANDROID_KEYSTORE_PATH" --ks-pass="pass:$ANDROID_KEY_PASS" --ks-key-alias=$ANDROID_KEY_ALIAS --key-pass="pass:$ANDROID_KEY_PASS"

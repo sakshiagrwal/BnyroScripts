@@ -21,6 +21,10 @@ more time-efficient.
 Helper tools for packaging, updating and maintaining xbps packages for Void
 Linux.
 
-### bnyro
+### flash
 
-Automated script for updating the system and downloading music via yt-dlp.
+Simply flash iso files to any external drive (e.g. SD Card).
+
+### apkbundle
+
+Sign aab bundles via bundletool and convert them to a .apks file.
