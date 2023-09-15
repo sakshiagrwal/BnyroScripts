@@ -95,7 +95,7 @@ update() {
 }
 
 parse_pkg_block() { # outdated pkg list
-	installed=$(xpkg | sed -e '/^.*32bit$/d' -e '/^.*-devel$/d' -e '/^lib.*$/d')
+	installed=$(xpkg | sed -e '/^lib.*$/d')
 	installed=$(echo -e "\n$installed\n")
 	echo "$1" | while read line; do
 		pkgname=$(echo $line | cut -d " " -f 1)
