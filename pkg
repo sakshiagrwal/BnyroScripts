@@ -49,11 +49,14 @@ commit() { # package name
 	echo ""
 }
 
-bump() { # package name, new version to update to, -{a,o} to adopt or orphan (optional)
+bump() { # package name, new version to update to, -{a,o,s} to adopt, orphan or keep branch (optional)
 	prep_pkgs
-	git branch -D "$1"
-	git checkout -b "$1"
-	git reset --hard upstream/master
+	# only checkout to a new branch if not disabled
+	if ! [ "$3" = "-s" ]; then
+		git branch -D "$1"
+		git checkout -b "$1"
+		git reset --hard upstream/master
+	fi
 	template="srcpkgs/$1/template"
 	# update the version
 	sed -i "0,/version=[0-9a-z\.]*/s//version=$2/" "$template"
