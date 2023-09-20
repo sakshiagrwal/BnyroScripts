@@ -112,7 +112,7 @@ parse_pkg_block() { # outdated pkg list
 	done
 }
 
-check_pkgs() {
+check_pkgs() { # the type of packages to return (-d: old, -o: orphaned)
 	prep_pkgs
 	usermail=$(git config user.email)
 	echo "Outdated packages of $usermail:"
@@ -121,6 +121,11 @@ check_pkgs() {
 	outdatedall=$(curl -s "$VOIDREPO/void-updates/void-updates.txt" | tail -n +4)
 	outdateddeduped="$(echo "$outdatedall" | tac | awk '!seen[$1]++' | tac)"
 	outdated="$(parse_pkg_block "$outdateddeduped")"
+	if [ "$1" = "-d" ]; then
+		outdated="$(echo "$outdated" | sed 's/ /&/6;T;d')"
+	elif [ "$1" = "-o" ]; then
+		outdated="$(echo "$outdated" | grep 'orphan')"
+	fi
 	echo "$outdated" | sort
 	echo -e "\nOutdated packages total: $(echo "$outdated" | wc -l)"
 }
@@ -156,7 +161,7 @@ maintainer() { # pkg name
 
 case ${1} in
 update) update ;;
-check) check_pkgs ;;
+check) check_pkgs "$2" ;;
 build) build "$2" "$3" ;;
 bump) bump "$2" "$3" "$4" ;;
 commit) commit "$2" ;;
