@@ -112,7 +112,7 @@ parse_pkg_block() { # outdated pkg list
 	done
 }
 
-check_pkgs() { # the type of packages to return (-d: old, -o: orphaned)
+check_pkgs() { # the type of packages to return (-o: orphaned, or outdated for a long time)
 	prep_pkgs
 	usermail=$(git config user.email)
 	echo "Outdated packages of $usermail:"
@@ -121,13 +121,13 @@ check_pkgs() { # the type of packages to return (-d: old, -o: orphaned)
 	outdatedall=$(curl -s "$VOIDREPO/void-updates/void-updates.txt" | tail -n +4)
 	outdateddeduped="$(echo "$outdatedall" | tac | awk '!seen[$1]++' | tac)"
 	outdated="$(parse_pkg_block "$outdateddeduped")"
-	if [ "$1" = "-d" ]; then
-		outdated="$(echo "$outdated" | sed 's/ /&/6;T;d')"
-	elif [ "$1" = "-o" ]; then
-		outdated="$(echo "$outdated" | grep 'orphan')"
+	if [ "$1" = "-o" ]; then
+		outdated="$(echo "$outdated" | sed 's/ /&/6;T;d'; echo "$outdated" | grep -E 'orphan|ericonr|gottox')"
 	fi
-	echo "$outdated" | sort
-	echo -e "\nOutdated packages total: $(echo "$outdated" | wc -l)"
+	outdated="$(echo "$outdated" | sort | uniq)"
+	echo -e "$outdated"
+	echo "============================"
+	echo -e "Outdated packages total: $(echo "$outdated" | wc -l)\n"
 }
 
 reset() {
